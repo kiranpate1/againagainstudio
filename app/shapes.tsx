@@ -10,8 +10,7 @@ export const shapes: SvgElement[] = [
     name: "Example Icon 1",
     svg: (
       <svg
-        height="100%"
-        width="100%"
+        className="w-full max-h-full"
         viewBox="0 0 175 294"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +27,7 @@ export const shapes: SvgElement[] = [
     name: "Example Icon 2",
     svg: (
       <svg
-        height="100%"
-        width="100%"
+        className="w-full max-h-full"
         viewBox="0 0 231 431"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -46,8 +44,7 @@ export const shapes: SvgElement[] = [
     name: "Example Icon 3",
     svg: (
       <svg
-        height="100%"
-        width="100%"
+        className="w-full max-h-full"
         viewBox="0 0 230 339"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +61,7 @@ export const shapes: SvgElement[] = [
     name: "Example Icon 4",
     svg: (
       <svg
-        height="100%"
-        width="100%"
+        className="w-full max-h-full"
         viewBox="0 0 154 338"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -82,8 +78,7 @@ export const shapes: SvgElement[] = [
     name: "Example Icon 5",
     svg: (
       <svg
-        height="100%"
-        width="100%"
+        className="w-full max-h-full"
         viewBox="0 0 211 320"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
