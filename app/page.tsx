@@ -74,9 +74,31 @@ export default function Home() {
       setActiveCard((prevActiveCard) => (prevActiveCard + 1) % events.length);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    // Unified drag start logic
+    const startDrag = (clientX: number, clientY: number) => {
+      startX.current = clientX;
+      startY.current = clientY;
+      isDragging.current = true;
+      hasTriggered.current = false;
+      eventCards.current?.style.setProperty("cursor", "grabbing");
+
+      // Calculate sensitivity once based on initial drag position
+      const allEvents = eventCards.current?.querySelectorAll(
+        ":scope > div"
+      ) as NodeListOf<HTMLElement>;
+      if (allEvents && allEvents[activeCardRef.current]) {
+        const cardRect =
+          allEvents[activeCardRef.current].getBoundingClientRect();
+        const relativeY = startY.current - cardRect.top;
+        const normalizedY = Math.min(Math.max(relativeY / cardHeight, 0), 1);
+        dragSensitivity.current = 1 - normalizedY * 0.9;
+      }
+    };
+
+    // Unified drag move logic
+    const moveDrag = (clientX: number) => {
       if (!isDragging.current) return;
-      const deltaX = e.clientX - startX.current;
+      const deltaX = clientX - startX.current;
       const now = performance.now();
 
       const allEvents = eventCards.current?.querySelectorAll(
@@ -84,14 +106,13 @@ export default function Home() {
       ) as NodeListOf<HTMLElement>;
 
       if (allEvents && allEvents[activeCardRef.current]) {
-        // Use stored sensitivity value to avoid changes during rotation
         const rotation = (deltaX / cardHeight) * dragSensitivity.current * 360;
 
         // Calculate velocity
         if (lastTimestamp.current > 0) {
           const timeDelta = now - lastTimestamp.current;
           const rotationDelta = rotation - lastRotation.current;
-          rotationVelocity.current = rotationDelta / timeDelta; // degrees per millisecond
+          rotationVelocity.current = rotationDelta / timeDelta;
         }
 
         lastRotation.current = rotation;
@@ -102,7 +123,7 @@ export default function Home() {
         ].style.transform = `rotateZ(${-rotation}deg)`;
         currentRotation.current = rotation;
 
-        // Update halfway state when crossing threshold (both directions)
+        // Update halfway state when crossing threshold
         const nowHalfway = Math.abs(rotation) >= 180;
         if (nowHalfway !== isHalfwayRef.current) {
           isHalfwayRef.current = nowHalfway;
@@ -111,34 +132,30 @@ export default function Home() {
       }
     };
 
-    const handleMouseUp = () => {
+    // Unified drag end logic
+    const endDrag = () => {
       isDragging.current = false;
 
       // Detect swipe direction based on current rotation or velocity
       if (isHalfwayRef.current) {
-        // If past halfway, determine direction from rotation value
         swipeDirection.current = currentRotation.current > 0 ? "right" : "left";
       } else if (Math.abs(rotationVelocity.current) > velocityThreshold) {
-        // If not past halfway but fast swipe, use velocity direction
         swipeDirection.current =
           rotationVelocity.current > 0 ? "right" : "left";
       }
 
       // Check if past halfway point OR velocity threshold was reached
       if (!hasTriggered.current && isHalfwayRef.current) {
-        // Past halfway - trigger next card
         handleNext();
         hasTriggered.current = true;
       } else if (
         !hasTriggered.current &&
         Math.abs(rotationVelocity.current) > velocityThreshold
       ) {
-        // Fast swipe before halfway - trigger next card
         handleNext();
         hasTriggered.current = true;
       } else if (!hasTriggered.current) {
-        // Not past halfway and not fast enough - animate back to 0
-        swipeDirection.current = null; // Reset if not triggered
+        swipeDirection.current = null;
         animateCardRotation(
           activeCardRef.current,
           currentRotation.current,
@@ -156,46 +173,55 @@ export default function Home() {
       lastTimestamp.current = 0;
       rotationVelocity.current = 0;
       eventCards.current?.style.setProperty("cursor", "grab");
+    };
 
-      // Remove listeners after drag ends
+    // Mouse event handlers
+    const handleMouseMove = (e: MouseEvent) => moveDrag(e.clientX);
+    const handleMouseUp = () => {
+      endDrag();
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-
     const handleMouseDown = (e: MouseEvent) => {
       e.preventDefault();
-      startX.current = e.clientX;
-      startY.current = e.clientY;
-      isDragging.current = true;
-      hasTriggered.current = false;
-      eventCards.current?.style.setProperty("cursor", "grabbing");
-
-      // Calculate sensitivity once based on initial drag position
-      const allEvents = eventCards.current?.querySelectorAll(
-        ":scope > div"
-      ) as NodeListOf<HTMLElement>;
-      if (allEvents && allEvents[activeCardRef.current]) {
-        const cardRect =
-          allEvents[activeCardRef.current].getBoundingClientRect();
-        const relativeY = startY.current - cardRect.top;
-        const normalizedY = Math.min(Math.max(relativeY / cardHeight, 0), 1);
-        dragSensitivity.current = 1 - normalizedY * 0.9; // Top = 1.0, Bottom = 0.2
-      }
-
-      // Add listeners when drag starts
+      startDrag(e.clientX, e.clientY);
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     };
 
+    // Touch event handlers
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // Prevent pull-to-refresh and scrolling
+      moveDrag(e.touches[0].clientX);
+    };
+    const handleTouchEnd = () => {
+      endDrag();
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault(); // Prevent default touch behavior
+      const touch = e.touches[0];
+      startDrag(touch.clientX, touch.clientY);
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+      document.addEventListener("touchend", handleTouchEnd);
+    };
+
     next.current?.addEventListener("click", handleNext);
     eventCards.current?.addEventListener("mousedown", handleMouseDown);
+    eventCards.current?.addEventListener("touchstart", handleTouchStart);
 
     return () => {
       next.current?.removeEventListener("click", handleNext);
       eventCards.current?.removeEventListener("mousedown", handleMouseDown);
+      eventCards.current?.removeEventListener("touchstart", handleTouchStart);
       // Clean up any lingering listeners
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
 
@@ -277,7 +303,7 @@ export default function Home() {
   }, [isHalfway]);
 
   return (
-    <main className="relative min-w-screen min-h-screen flex flex-col gap-10 justify-center items-center">
+    <main className="fixed w-screen max-w-dvw h-screen max-h-dvh flex flex-col gap-10 justify-center items-center overflow-hidden">
       <div className="absolute top-12 left-12 flex">
         <button ref={next}>{`>`}</button>
       </div>
