@@ -7,6 +7,8 @@ import { shapes } from "./shapes";
 
 export default function Home() {
   const [activeCard, setActiveCard] = useState(0);
+  const [isHalfway, setIsHalfway] = useState(false);
+  const isHalfwayRef = useRef(false);
   const activeCardRef = useRef(0);
   const prevActiveCard = useRef(activeCard);
   const next = useRef<HTMLButtonElement>(null);
@@ -20,6 +22,8 @@ export default function Home() {
   const lastRotation = useRef(0);
   const lastTimestamp = useRef(0);
   const rotationVelocity = useRef(0);
+  const dragSensitivity = useRef(1); // Store sensitivity for the current drag
+  const swipeDirection = useRef<"right" | "left" | null>(null); // Track swipe direction
   const cardHeight = 320; // h-80 = 320px
   const velocityThreshold = 0.2; // degrees per millisecond
 
@@ -70,16 +74,7 @@ export default function Home() {
       setActiveCard((prevActiveCard) => (prevActiveCard + 1) % events.length);
     };
 
-    next.current?.addEventListener("click", handleNext);
-    eventCards.current?.addEventListener("mousedown", (e) => {
-      e.preventDefault();
-      startX.current = e.clientX;
-      startY.current = e.clientY;
-      isDragging.current = true;
-      hasTriggered.current = false;
-      eventCards.current?.style.setProperty("cursor", "grabbing");
-    });
-    eventCards.current?.addEventListener("mousemove", (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging.current) return;
       const deltaX = e.clientX - startX.current;
       const now = performance.now();
@@ -89,14 +84,8 @@ export default function Home() {
       ) as NodeListOf<HTMLElement>;
 
       if (allEvents && allEvents[activeCardRef.current]) {
-        const cardRect =
-          allEvents[activeCardRef.current].getBoundingClientRect();
-        const relativeY = startY.current - cardRect.top; // Y position relative to card top
-        const normalizedY = Math.min(Math.max(relativeY / cardHeight, 0), 1); // 0 at top, 1 at bottom
-        const sensitivity = 1 - normalizedY * 0.8; // Top = 1.0, Bottom = 0.3
-
-        // Rotation is more sensitive at top, less at bottom
-        const rotation = (deltaX / cardHeight) * sensitivity * 360;
+        // Use stored sensitivity value to avoid changes during rotation
+        const rotation = (deltaX / cardHeight) * dragSensitivity.current * 360;
 
         // Calculate velocity
         if (lastTimestamp.current > 0) {
@@ -112,21 +101,44 @@ export default function Home() {
           activeCardRef.current
         ].style.transform = `rotateZ(${-rotation}deg)`;
         currentRotation.current = rotation;
+
+        // Update halfway state when crossing threshold (both directions)
+        const nowHalfway = Math.abs(rotation) >= 180;
+        if (nowHalfway !== isHalfwayRef.current) {
+          isHalfwayRef.current = nowHalfway;
+          setIsHalfway(nowHalfway);
+        }
       }
-    });
-    document.addEventListener("mouseup", () => {
+    };
+
+    const handleMouseUp = () => {
       isDragging.current = false;
 
-      // Check if velocity threshold was reached
-      if (
+      // Detect swipe direction based on current rotation or velocity
+      if (isHalfwayRef.current) {
+        // If past halfway, determine direction from rotation value
+        swipeDirection.current = currentRotation.current > 0 ? "right" : "left";
+      } else if (Math.abs(rotationVelocity.current) > velocityThreshold) {
+        // If not past halfway but fast swipe, use velocity direction
+        swipeDirection.current =
+          rotationVelocity.current > 0 ? "right" : "left";
+      }
+
+      // Check if past halfway point OR velocity threshold was reached
+      if (!hasTriggered.current && isHalfwayRef.current) {
+        // Past halfway - trigger next card
+        handleNext();
+        hasTriggered.current = true;
+      } else if (
         !hasTriggered.current &&
-        rotationVelocity.current > velocityThreshold
+        Math.abs(rotationVelocity.current) > velocityThreshold
       ) {
-        // Fast swipe right - trigger next card
+        // Fast swipe before halfway - trigger next card
         handleNext();
         hasTriggered.current = true;
       } else if (!hasTriggered.current) {
-        // Not fast enough - animate back to 0
+        // Not past halfway and not fast enough - animate back to 0
+        swipeDirection.current = null; // Reset if not triggered
         animateCardRotation(
           activeCardRef.current,
           currentRotation.current,
@@ -144,13 +156,46 @@ export default function Home() {
       lastTimestamp.current = 0;
       rotationVelocity.current = 0;
       eventCards.current?.style.setProperty("cursor", "grab");
-    });
+
+      // Remove listeners after drag ends
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+      startX.current = e.clientX;
+      startY.current = e.clientY;
+      isDragging.current = true;
+      hasTriggered.current = false;
+      eventCards.current?.style.setProperty("cursor", "grabbing");
+
+      // Calculate sensitivity once based on initial drag position
+      const allEvents = eventCards.current?.querySelectorAll(
+        ":scope > div"
+      ) as NodeListOf<HTMLElement>;
+      if (allEvents && allEvents[activeCardRef.current]) {
+        const cardRect =
+          allEvents[activeCardRef.current].getBoundingClientRect();
+        const relativeY = startY.current - cardRect.top;
+        const normalizedY = Math.min(Math.max(relativeY / cardHeight, 0), 1);
+        dragSensitivity.current = 1 - normalizedY * 0.9; // Top = 1.0, Bottom = 0.2
+      }
+
+      // Add listeners when drag starts
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    };
+
+    next.current?.addEventListener("click", handleNext);
+    eventCards.current?.addEventListener("mousedown", handleMouseDown);
 
     return () => {
       next.current?.removeEventListener("click", handleNext);
-      eventCards.current?.removeEventListener("mousedown", () => {});
-      eventCards.current?.removeEventListener("mousemove", () => {});
-      eventCards.current?.removeEventListener("mouseup", () => {});
+      eventCards.current?.removeEventListener("mousedown", handleMouseDown);
+      // Clean up any lingering listeners
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);
 
@@ -170,29 +215,66 @@ export default function Home() {
       : activeCard;
 
     const from = currentRotation.current;
-    const to = countedUp ? 360 : 0;
+    // Determine rotation direction based on swipe direction
+    let to;
+    if (swipeDirection.current === "right") {
+      to = 360; // Rotate clockwise
+    } else if (swipeDirection.current === "left") {
+      to = -360; // Rotate counter-clockwise
+    } else {
+      // Default behavior (e.g., button click)
+      to = countedUp ? 360 : 0;
+    }
 
-    // Update z-indices at halfway point
-    let hasUpdatedZIndex = false;
-    const checkZIndexUpdate = () => {
-      if (!hasUpdatedZIndex) {
-        hasUpdatedZIndex = true;
-        setTimeout(() => {
-          allEvents.forEach((event, index) => {
-            const offset = (index - activeCard + events.length) % events.length;
-            const zIndex = events.length - offset;
-            event.style.zIndex = `${zIndex}`;
-          });
-        }, duration / 8);
-      }
-    };
+    // Trigger z-index swap at halfway point of animation
+    setTimeout(() => {
+      allEvents.forEach((event, index) => {
+        const offset = (index - activeCard + events.length) % events.length;
+        const zIndex = events.length - offset;
+        event.style.zIndex = `${zIndex}`;
 
-    checkZIndexUpdate();
+        // Add slight rotation for shuffle effect - cards behind rotate slightly
+        const shuffleRotation = offset * 4; // 4 degrees per card position
+        event.style.rotate = `${-shuffleRotation}deg`;
+      });
+    }, duration / 8);
 
     animateCardRotation(previousActive, from, to, duration, () => {
       currentRotation.current = 0;
+      swipeDirection.current = null; // Reset swipe direction
     });
   }, [activeCard]);
+
+  // Update z-indices when rotation crosses halfway threshold
+  useEffect(() => {
+    console.log("test1");
+    const allEvents = eventCards.current?.querySelectorAll(
+      ":scope > div"
+    ) as NodeListOf<HTMLElement>;
+
+    if (!allEvents) return;
+
+    allEvents.forEach((event, index) => {
+      let offset, zIndex;
+
+      if (isHalfway) {
+        // Past halfway - next card should be on top
+        const nextCard = (activeCardRef.current + 1) % events.length;
+        offset = (index - nextCard + events.length) % events.length;
+      } else {
+        // Before halfway - current card should be on top
+        offset =
+          (index - activeCardRef.current + events.length) % events.length;
+      }
+
+      zIndex = events.length - offset;
+      event.style.zIndex = `${zIndex}`;
+
+      // Update slight rotation for shuffle effect
+      const shuffleRotation = offset * 4;
+      event.style.rotate = `${-shuffleRotation}deg`;
+    });
+  }, [isHalfway]);
 
   return (
     <main className="relative min-w-screen min-h-screen flex flex-col gap-10 justify-center items-center">
@@ -210,7 +292,8 @@ export default function Home() {
               key={event.name}
               className="absolute"
               style={{
-                transformOrigin: "50% -5%",
+                transformOrigin: "50% -1%",
+                transition: "rotate 0.3s ease",
               }}
             >
               {shapes.map((shape, i) =>
