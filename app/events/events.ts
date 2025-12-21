@@ -24,16 +24,17 @@ const events = [
     link: "https://musicfestival.com/2024",
   },
   {
-    name: "Music Festival dsaasdasf",
-    description: "Join us for a weekend of live music and fun.",
+    name: "Oil Painting Workshop",
+    description:
+      "Explore your creativity with oil paints in this hands-on workshop.",
     date: "2024-09-10",
     cover: "/images/test.png",
     colors: ["neutral-300", "red-dark"],
     link: "https://musicfestival.com/2024",
   },
   {
-    name: "Music Festival fsd",
-    description: "Join us for a weekend of live music and fun.",
+    name: "Animation 101",
+    description: "Learn the basics of animation in this introductory course.",
     date: "2024-09-10",
     cover: "/images/test.png",
     colors: ["blue-light", "green-900"],

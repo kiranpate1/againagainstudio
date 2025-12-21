@@ -26,7 +26,7 @@ export default function Home() {
   const swipeDirection = useRef<"right" | "left" | null>(null); // Track swipe direction
   const activeCardAnimationId = useRef<number | null>(null); // Track active card animation
   const cardHeight = 320; // h-80 = 320px
-  const velocityThreshold = 0.2; // degrees per millisecond
+  const velocityThreshold = 0.17; // degrees per millisecond
 
   // Generic animation function that can be called from different triggers
   const animateCardRotation = (
@@ -47,7 +47,9 @@ export default function Home() {
     const ease = (t: number) => {
       if (t === 0 || t === 1) return t;
       const c4 = (2 * Math.PI) / 4.5;
-      return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+      return (
+        Math.pow(2, -13 * t) * Math.sin((Math.pow(t, 1.5) * 10 - 0.75) * c4) + 1
+      );
     };
 
     function step(timestamp: number) {
@@ -82,7 +84,7 @@ export default function Home() {
     }
   };
 
-  /*  Handle drag to rotate cards */
+  //  Handle drag to rotate cards
   useEffect(() => {
     const handleNext = () => {
       setActiveCard((prevActiveCard) => (prevActiveCard + 1) % events.length);
@@ -180,7 +182,7 @@ export default function Home() {
           activeCardRef.current,
           currentRotation.current,
           0,
-          2000,
+          duration / 2,
           () => {
             currentRotation.current = 0;
           }
@@ -245,6 +247,7 @@ export default function Home() {
     };
   }, []);
 
+  // Handle active card change
   useEffect(() => {
     const countedUp =
       activeCard > prevActiveCard.current ||
@@ -290,7 +293,7 @@ export default function Home() {
     });
   }, [activeCard]);
 
-  // Update z-indices when rotation crosses halfway threshold
+  // Update z-indices and rotation staggering on halfway state change
   useEffect(() => {
     console.log("test1");
     const allEvents = eventCards.current?.querySelectorAll(
@@ -328,8 +331,7 @@ export default function Home() {
       </div>
       <div className="relative flex justify-center items-center">
         <div
-          className="absolute flex justify-center items-start cursor-grab aspect-2/3 w-50"
-          // style={{ transform: "rotateY(20deg)" }}
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 w-[clamp(200px,60vw,300px)]"
           ref={eventCards}
         >
           {events.map((event, n) => (
@@ -355,7 +357,7 @@ export default function Home() {
                   </div>
                 ) : null
               )}
-              <div className="absolute top-1/2 -translate-y-1/2 left-0 p-4">
+              <div className="absolute top-1/2 -translate-y-1/2 left-0 p-3">
                 {/* <Image
                   className="aspect-2/1 object-cover rounded-lg"
                   src={event.cover}
@@ -365,10 +367,10 @@ export default function Home() {
                   // layout="fill"
                   objectFit="cover"
                 /> */}
-                <div className="flex flex-col justify-end">
-                  <h2 className="text-xl leading-4">{event.name}</h2>
-                  <p className="text-sm">{event.description}</p>
-                  <p className="text-xs mt-1">{event.date}</p>
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-xl leading-6">{event.name}</h2>
+                  <p className="text-sm leading-[130%]">{event.description}</p>
+                  <p className="text-sm leading-[130%]">{event.date}</p>
                   {/* <a
                     href={event.link}
                     target="_blank"

@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
         {children}
       </body>
