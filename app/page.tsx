@@ -13,7 +13,7 @@ export default function Home() {
   const prevActiveCard = useRef(activeCard);
   const next = useRef<HTMLButtonElement>(null);
   const eventCards = useRef<HTMLDivElement>(null);
-  const duration = 600; // in ms
+  const duration = 2000; // in ms
   const startX = useRef(0);
   const startY = useRef(0);
   const isDragging = useRef(false);
@@ -24,6 +24,7 @@ export default function Home() {
   const rotationVelocity = useRef(0);
   const dragSensitivity = useRef(1); // Store sensitivity for the current drag
   const swipeDirection = useRef<"right" | "left" | null>(null); // Track swipe direction
+  const activeCardAnimationId = useRef<number | null>(null); // Track active card animation
   const cardHeight = 320; // h-80 = 320px
   const velocityThreshold = 0.2; // degrees per millisecond
 
@@ -42,10 +43,11 @@ export default function Home() {
     if (!allEvents || !allEvents[cardIndex]) return;
 
     let start: number | null = null;
+    let animationFrameId: number;
     const ease = (t: number) => {
-      const c1 = 1.70158;
-      const c3 = c1 + 1;
-      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+      if (t === 0 || t === 1) return t;
+      const c4 = (2 * Math.PI) / 4.5;
+      return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
     };
 
     function step(timestamp: number) {
@@ -59,13 +61,25 @@ export default function Home() {
       allEvents[cardIndex].style.transform = `rotateZ(${-currentValue}deg)`;
 
       if (progress < 1) {
-        requestAnimationFrame(step);
+        animationFrameId = requestAnimationFrame(step);
+        // Store if this is the active card
+        if (cardIndex === activeCardRef.current) {
+          activeCardAnimationId.current = animationFrameId;
+        }
       } else {
         if (onComplete) onComplete();
+        // Clear the animation ID when done
+        if (cardIndex === activeCardRef.current) {
+          activeCardAnimationId.current = null;
+        }
       }
     }
 
-    requestAnimationFrame(step);
+    animationFrameId = requestAnimationFrame(step);
+    // Store if this is the active card
+    if (cardIndex === activeCardRef.current) {
+      activeCardAnimationId.current = animationFrameId;
+    }
   };
 
   /*  Handle drag to rotate cards */
@@ -76,6 +90,12 @@ export default function Home() {
 
     // Unified drag start logic
     const startDrag = (clientX: number, clientY: number) => {
+      // Cancel any ongoing animation on the active card
+      if (activeCardAnimationId.current !== null) {
+        cancelAnimationFrame(activeCardAnimationId.current);
+        activeCardAnimationId.current = null;
+      }
+
       startX.current = clientX;
       startY.current = clientY;
       isDragging.current = true;
@@ -160,7 +180,7 @@ export default function Home() {
           activeCardRef.current,
           currentRotation.current,
           0,
-          400,
+          2000,
           () => {
             currentRotation.current = 0;
           }
@@ -253,17 +273,16 @@ export default function Home() {
     }
 
     // Trigger z-index swap at halfway point of animation
-    setTimeout(() => {
-      allEvents.forEach((event, index) => {
-        const offset = (index - activeCard + events.length) % events.length;
-        const zIndex = events.length - offset;
-        event.style.zIndex = `${zIndex}`;
 
-        // Add slight rotation for shuffle effect - cards behind rotate slightly
-        const shuffleRotation = offset * 4; // 4 degrees per card position
-        event.style.rotate = `${-shuffleRotation}deg`;
-      });
-    }, duration / 8);
+    allEvents.forEach((event, index) => {
+      const offset = (index - activeCard + events.length) % events.length;
+      const zIndex = events.length - offset;
+      event.style.zIndex = `${zIndex}`;
+
+      // Add slight rotation for shuffle effect - cards behind rotate slightly
+      const shuffleRotation = offset * 4; // 4 degrees per card position
+      event.style.rotate = `${-shuffleRotation}deg`;
+    });
 
     animateCardRotation(previousActive, from, to, duration, () => {
       currentRotation.current = 0;
@@ -309,15 +328,16 @@ export default function Home() {
       </div>
       <div className="relative flex justify-center items-center">
         <div
-          className="absolute flex justify-center items-center cursor-grab"
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 w-50"
           // style={{ transform: "rotateY(20deg)" }}
           ref={eventCards}
         >
           {events.map((event, n) => (
             <div
               key={event.name}
-              className="absolute"
+              className="absolute w-full"
               style={{
+                color: `var(--${event.colors[1]})`,
                 transformOrigin: "50% -1%",
                 transition: "rotate 0.3s ease",
               }}
@@ -326,37 +346,39 @@ export default function Home() {
                 i === n ? (
                   <div
                     key={shape.id}
-                    className="relative inset-0 h-80 w-50"
+                    className="relative inset-0 w-full"
                     // style={{
                     //   transform: `rotateZ(${((n * 7) % 10) - 5}deg)`,
                     // }}
                   >
-                    {shape.svg}
+                    {shape.svg(event.colors[0])}
                   </div>
                 ) : null
               )}
-              {/* <Image
-              src={event.cover}
-              alt={event.name}
-              width={200}
-              height={120}
-              // layout="fill"
-              objectFit="cover"
-              className=""
-            />
-            <div className=" bg-black bg-opacity-50 flex flex-col justify-end p-4">
-              <h2 className="text-white text-xl font-bold">{event.name}</h2>
-              <p className="text-white text-sm">{event.description}</p>
-              <p className="text-white text-xs mt-1">{event.date}</p>
-              <a
-                href={event.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
-              >
-                Learn More
-              </a>
-            </div> */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-0 p-4">
+                {/* <Image
+                  className="aspect-2/1 object-cover rounded-lg"
+                  src={event.cover}
+                  alt={event.name}
+                  width={200}
+                  height={100}
+                  // layout="fill"
+                  objectFit="cover"
+                /> */}
+                <div className="flex flex-col justify-end">
+                  <h2 className="text-xl leading-4">{event.name}</h2>
+                  <p className="text-sm">{event.description}</p>
+                  <p className="text-xs mt-1">{event.date}</p>
+                  {/* <a
+                    href={event.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
+                  >
+                    Learn More
+                  </a> */}
+                </div>
+              </div>
             </div>
           ))}
         </div>

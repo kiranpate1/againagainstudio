@@ -3,11 +3,26 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --purple: #908eb8;
-  --orange: #fc8759;
-  --green: #05594c;
-  --blue: #3aa2f2;
-  --yellow: #f2c14e;
+  --red-vibrant: #893835;
+  --red-dark: #5e1b0a;
+  --red-900: #4c393d;
+  --red-800: #7b5659;
+  --red-light: #e19572;
+  --blue-vibrant: #4293c2;
+  --blue-dark: #61789b;
+  --blue-light: #b4cbed;
+  --green-vibrant: #b0ab50;
+  --green-900: #446b69;
+  --green-800: #69755e;
+  --green-200: #9bc8ac;
+  --green-100: #e2ce73;
+  --green-light: #fbe4b2;
+  --purple: #c5abc5;
+  --neutral-1000: #27201e;
+  --neutral-300: #c7b6ad;
+  --neutral-200: #eae0e0;
+  --neutral-100: #fff7e6;
+  --neutral-0: #fafafa;
 }
 
 @theme inline {
@@ -27,5 +42,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-syne), sans-serif;
 }

@@ -4,6 +4,7 @@ const events = [
     description: "A fun-filled event with donuts and more!",
     date: "2024-07-01",
     cover: "/images/test.png",
+    colors: ["red-vibrant", "blue-light"],
     link: "https://duncansdonuts.com/events/test",
   },
   {
@@ -11,6 +12,7 @@ const events = [
     description: "Learn to code in a summer-long intensive bootcamp.",
     date: "2024-08-15",
     cover: "/images/test.png",
+    colors: ["blue-vibrant", "red-900"],
     link: "https://codingbootcamp.com/summer-2024",
   },
   {
@@ -18,6 +20,7 @@ const events = [
     description: "Join us for a weekend of live music and fun.",
     date: "2024-09-10",
     cover: "/images/test.png",
+    colors: ["green-900", "red-light"],
     link: "https://musicfestival.com/2024",
   },
   {
@@ -25,6 +28,7 @@ const events = [
     description: "Join us for a weekend of live music and fun.",
     date: "2024-09-10",
     cover: "/images/test.png",
+    colors: ["neutral-300", "red-dark"],
     link: "https://musicfestival.com/2024",
   },
   {
@@ -32,6 +36,7 @@ const events = [
     description: "Join us for a weekend of live music and fun.",
     date: "2024-09-10",
     cover: "/images/test.png",
+    colors: ["blue-light", "green-900"],
     link: "https://musicfestival.com/2024",
   },
 ];
