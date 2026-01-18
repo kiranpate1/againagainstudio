@@ -2,11 +2,23 @@
 
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import events from "./events";
 import { shapes } from "../shapes";
+import { eventColors } from "../utils/eventColors";
 
-export default function EventsBook() {
+type props = {
+  events: any[];
+  onActiveEventChange?: (event: any) => void;
+};
+
+export default function EventsBook({ events, onActiveEventChange }: props) {
   const [activeCard, setActiveCard] = useState(0);
+
+  // Notify parent when active card changes
+  useEffect(() => {
+    if (onActiveEventChange && events[activeCard]) {
+      onActiveEventChange(events[activeCard]);
+    }
+  }, [activeCard, events, onActiveEventChange]);
   const [isHalfway, setIsHalfway] = useState(false);
   const isHalfwayRef = useRef(false);
   const activeCardRef = useRef(0);
@@ -349,12 +361,12 @@ export default function EventsBook() {
   }, []);
 
   return (
-    <div className="relative w-[300px] h-[400px] flex items-center justify-center">
-      <div className="absolute top-12 left-12 flex">
+    <div className="relative w-full md:w-[300px] h-full md:h-[400px] flex items-center justify-center">
+      <div className="absolute bottom-0 right-0 flex">
         <button ref={next}>{`>`}</button>
       </div>
       <div className="relative flex justify-center items-center">
-        <Image
+        {/* <Image
           className="absolute left-1/2 origin-bottom-left"
           style={{
             minWidth: cardWidth / 4,
@@ -365,7 +377,7 @@ export default function EventsBook() {
           height={382}
           src="/images/chain-1.png"
           alt="Chain"
-        />
+        /> */}
         <div
           className="absolute flex justify-center items-start cursor-grab aspect-2/3"
           style={{ width: cardWidth }}
@@ -373,10 +385,10 @@ export default function EventsBook() {
         >
           {events.map((event, n) => (
             <div
-              key={event.name}
+              key={n}
               className="absolute w-full"
               style={{
-                color: `var(--${event.colors[1]})`,
+                color: `var(--${eventColors[n % eventColors.length][1]})`,
                 transformOrigin: "50% -1%",
                 transition: "rotate 0.3s ease",
               }}
@@ -396,32 +408,29 @@ export default function EventsBook() {
                         width: cardWidth / 8,
                       }}
                     >
-                      <Image
+                      {/* <Image
                         className="absolute bottom-0 right-0 min-w-[200%]"
                         width={202}
                         height={382}
                         src="/images/chain-1.png"
                         alt="Chain"
-                      />
+                      /> */}
                     </div>
-                    {shape.svg(event.colors[0])}
+                    {shape.svg(eventColors[n % eventColors.length][0])}
                   </div>
                 ) : null
               )}
-              <div className="absolute top-1/2 -translate-y-1/2 left-0 p-3">
-                {/* <Image
-                  className="aspect-2/1 object-cover rounded-lg"
-                  src={event.cover}
-                  alt={event.name}
-                  width={200}
-                  height={100}
-                  // layout="fill"
-                  objectFit="cover"
-                /> */}
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-xl leading-6">{event.name}</h2>
-                  <p className="text-sm leading-[130%]">{event.description}</p>
-                  <p className="text-sm leading-[130%]">{event.date}</p>
+              <div className="absolute inset-0">
+                <div className="w-full h-full flex items-center justify-center">
+                  {event.image ? (
+                    <Image
+                      src={event.image}
+                      alt={event.eventName}
+                      width={200}
+                      height={100}
+                      className="object-cover rounded-lg"
+                    />
+                  ) : null}
                   {/* <a
                     href={event.link}
                     target="_blank"

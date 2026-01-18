@@ -80,7 +80,7 @@ export default function Navigation() {
         <a href="/info">
           <p className="uppercase">Info</p>
         </a>
-        <a href="/events">
+        <a href="/">
           <p className="uppercase">Events</p>
         </a>
       </div>
