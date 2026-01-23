@@ -37,7 +37,7 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-(--bisqueware) text-(--kiln-fire)`}
       >
-        <main className="fixed w-screen max-w-dvw h-screen max-h-dvh overflow-hidden">
+        <main className="fixed w-screen h-screen overflow-hidden">
           <ProjectContentProvider>
             <ViewTransitions>
               <Navigation />
