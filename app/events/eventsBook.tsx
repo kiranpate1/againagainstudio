@@ -368,7 +368,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
       </div>
       <div className="relative flex justify-center items-center">
         <div
-          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh]"
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[27vh]"
           style={{ width: cardWidth }}
         >
           <div
@@ -376,14 +376,14 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
             style={{
               minWidth: 20,
               top: "0%",
-              transform: "translate(-50%,-57.5%)",
+              transform: "translate(-50%,-57%)",
             }}
           >
             <EventsRing />
           </div>
         </div>
         <div
-          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh]"
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[27vh]"
           style={{ width: cardWidth }}
           ref={eventCards}
         >

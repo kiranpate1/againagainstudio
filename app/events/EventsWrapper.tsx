@@ -20,7 +20,7 @@ export default function EventsWrapper({ events }: Props) {
     <>
       <div className="absolute inset-[0_0_0_58px] md:inset-[0_0_80px_0] flex flex-col md:w-full md:flex-row justify-center items-center">
         <EventsBook events={events} onActiveEventChange={setActiveEvent} />
-        <div className="w-full md:max-w-[400px] h-[200px] md:h-[400px] relative p-4 md:p-12">
+        <div className="w-full md:max-w-[400px] min-h-[250px] md:min-h-[400px] relative p-4 md:p-12">
           <Image
             className="absolute left-0 min-w-[120%] min-h-[120%] hidden md:block"
             src="/images/events-bg.png"
