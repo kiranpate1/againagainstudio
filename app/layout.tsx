@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ViewTransitions } from "next-view-transitions";
+import { ProjectContentProvider } from "./components/ProjectContentContext";
+import Navigation from "./components/navigation";
+import InfoContainer from "./components/infoContainer";
 import { Syne } from "next/font/google";
 
 const syne = Syne({
@@ -33,7 +37,15 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-(--bisqueware) text-(--kiln-fire)`}
       >
-        {children}
+        <main className="fixed w-screen max-w-dvw h-screen max-h-dvh overflow-hidden">
+          <ProjectContentProvider>
+            <ViewTransitions>
+              <Navigation />
+              <InfoContainer />
+              {children}
+            </ViewTransitions>
+          </ProjectContentProvider>
+        </main>
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ type Props = {
 
 export default function EventsWrapper({ events }: Props) {
   const [activeEvent, setActiveEvent] = useState<Event | null>(
-    events[0] || null
+    events[0] || null,
   );
 
   return (
@@ -30,15 +30,13 @@ export default function EventsWrapper({ events }: Props) {
           {activeEvent && (
             <div className="relative flex flex-col gap-4 md:gap-9">
               <div className="flex flex-col gap-0 md:gap-1">
-                <p className="text-[14px] md:text-[18px] tracking-[-0.01em]">
-                  {formatEventDate(activeEvent.date)}
-                </p>
+                <p className="paragraph">{formatEventDate(activeEvent.date)}</p>
                 <h1 className="text-[30px] md:text-[40px] tracking-[-0.04em]">
                   {activeEvent.eventName}
                 </h1>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-[14px] md:text-[18px] tracking-[-0.01em]">
+                <p className="paragraph">
                   {activeEvent.description}
                   {activeEvent.hostName && (
                     <>

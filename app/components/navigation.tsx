@@ -1,12 +1,77 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Navigation() {
+  const navInfo = useRef<HTMLDivElement>(null);
+  const navEvents = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const pageSlug = pathname.split("/")[1];
+    const infoLetters = navInfo.current?.querySelectorAll(
+      "p",
+    ) as NodeListOf<HTMLElement>;
+    const eventsLetters = navEvents.current?.querySelectorAll(
+      "p",
+    ) as NodeListOf<HTMLElement>;
+
+    if (pageSlug === "info") {
+      infoLetters[0]?.style.setProperty(
+        "transform",
+        "translate(10%,0%) rotate(3deg)",
+      );
+      infoLetters[1]?.style.setProperty(
+        "transform",
+        "translate(-2%,6%) rotate(-11deg)",
+      );
+      infoLetters[2]?.style.setProperty(
+        "transform",
+        "translate(-6%,-4%) rotate(4deg)",
+      );
+      infoLetters[3]?.style.setProperty(
+        "transform",
+        "translate(-10%,0%) rotate(-20deg)",
+      );
+      eventsLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
+    } else if (pageSlug === "") {
+      eventsLetters[0]?.style.setProperty(
+        "transform",
+        "translate(20%,0%) rotate(-10deg)",
+      );
+      eventsLetters[1]?.style.setProperty(
+        "transform",
+        "translate(12%,-6%) rotate(0deg)",
+      );
+      eventsLetters[2]?.style.setProperty(
+        "transform",
+        "translate(4%,0%) rotate(8deg)",
+      );
+      eventsLetters[3]?.style.setProperty(
+        "transform",
+        "translate(-4%,4%) rotate(0deg)",
+      );
+      eventsLetters[4]?.style.setProperty(
+        "transform",
+        "translate(-12%,-8%) rotate(6deg)",
+      );
+      eventsLetters[5]?.style.setProperty(
+        "transform",
+        "translate(-20%,0%) rotate(-20deg)",
+      );
+      infoLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
+    }
+  }, [pathname]);
+
   return (
     <nav className="fixed z-100 inset-[8px_16px_auto_16px] p-2 flex justify-between items-center">
-      <a href="/">
+      <Link href="/">
         <svg
           width="197"
           height="24"
@@ -75,14 +140,32 @@ export default function Navigation() {
             fill="currentColor"
           />
         </svg>
-      </a>
+      </Link>
       <div className="flex items-center gap-20">
-        <a href="/info">
-          <p className="uppercase">Info</p>
-        </a>
-        <a href="/">
-          <p className="uppercase">Events</p>
-        </a>
+        <Link href="/info">
+          <div
+            className="uppercase opacity-100 hover:opacity-60 duration-200"
+            ref={navInfo}
+          >
+            <p className="inline-block duration-200 ease-in-out">I</p>
+            <p className="inline-block duration-200 ease-in-out">n</p>
+            <p className="inline-block duration-200 ease-in-out">f</p>
+            <p className="inline-block duration-200 ease-in-out">o</p>
+          </div>
+        </Link>
+        <Link href="/">
+          <div
+            className="uppercase opacity-100 hover:opacity-60 duration-200"
+            ref={navEvents}
+          >
+            <p className="inline-block duration-200 ease-in-out">E</p>
+            <p className="inline-block duration-200 ease-in-out">v</p>
+            <p className="inline-block duration-200 ease-in-out">e</p>
+            <p className="inline-block duration-200 ease-in-out">n</p>
+            <p className="inline-block duration-200 ease-in-out">t</p>
+            <p className="inline-block duration-200 ease-in-out">s</p>
+          </div>
+        </Link>
       </div>
     </nav>
   );

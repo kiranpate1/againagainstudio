@@ -6,9 +6,8 @@ export default async function Home() {
   const events = await getNotionEvents();
 
   return (
-    <main className="fixed w-screen max-w-dvw h-screen max-h-dvh overflow-hidden">
-      <Navigation />
+    <div className="">
       <EventsWrapper events={events} />
-    </main>
+    </div>
   );
 }

@@ -4,6 +4,9 @@
   --bisqueware: #fff7e6;
   --kiln-fire: #461407;
   --copper: #96484e;
+  --charm: #e2ce73;
+  --florals: #b0ab50;
+  --slip: #27201e;
   --background: #ffffff;
   --foreground: #171717;
   --red-vibrant: #893835;
@@ -26,6 +29,28 @@
   --neutral-200: #eae0e0;
   --neutral-100: #fff7e6;
   --neutral-0: #fafafa;
+}
+
+@utility paragraph {
+  font-family: var(
+    --font-monumentGrotesk,
+    "MonumentGrotesk",
+    system-ui,
+    sans-serif
+  );
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 120%;
+  font-style: normal;
+  letter-spacing: -0.14px;
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 120%;
+    font-style: normal;
+    letter-spacing: -0.14px;
+  }
 }
 
 @theme inline {

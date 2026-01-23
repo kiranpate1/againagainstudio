@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { shapes } from "../shapes";
 import { eventColors } from "../utils/eventColors";
+import EventsRing from "./eventsRing";
 
 type props = {
   events: any[];
@@ -45,10 +46,10 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
     fromRotation: number,
     toRotation: number,
     animDuration: number,
-    onComplete?: () => void
+    onComplete?: () => void,
   ) => {
     const allEvents = eventCards.current?.querySelectorAll(
-      ":scope > div"
+      ":scope > div",
     ) as NodeListOf<HTMLElement>;
 
     if (!allEvents || !allEvents[cardIndex]) return;
@@ -61,7 +62,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
       // return (
       //   Math.pow(2, -13 * t) * Math.sin((Math.pow(t, 1.5) * 10 - 0.75) * c4) + 1
       // );
-      return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+      return Math.pow(2, -18 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
     };
 
     function step(timestamp: number) {
@@ -120,7 +121,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
 
       // Calculate sensitivity once based on initial drag position
       const allEvents = eventCards.current?.querySelectorAll(
-        ":scope > div"
+        ":scope > div",
       ) as NodeListOf<HTMLElement>;
       if (allEvents && allEvents[activeCardRef.current]) {
         const cardRect =
@@ -138,7 +139,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
       const now = performance.now();
 
       const allEvents = eventCards.current?.querySelectorAll(
-        ":scope > div"
+        ":scope > div",
       ) as NodeListOf<HTMLElement>;
 
       if (allEvents && allEvents[activeCardRef.current]) {
@@ -154,9 +155,8 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
         lastRotation.current = rotation;
         lastTimestamp.current = now;
 
-        allEvents[
-          activeCardRef.current
-        ].style.transform = `rotateZ(${-rotation}deg)`;
+        allEvents[activeCardRef.current].style.transform =
+          `rotateZ(${-rotation}deg)`;
         currentRotation.current = rotation;
 
         // Update halfway state when crossing threshold
@@ -199,7 +199,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
           duration / 2,
           () => {
             currentRotation.current = 0;
-          }
+          },
         );
       }
 
@@ -271,7 +271,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
     //add counted down here
 
     const allEvents = eventCards.current?.querySelectorAll(
-      ":scope > div"
+      ":scope > div",
     ) as NodeListOf<HTMLElement>;
 
     const previousActive = countedUp
@@ -313,7 +313,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
   // Update z-indices and rotation staggering on halfway state change
   useEffect(() => {
     const allEvents = eventCards.current?.querySelectorAll(
-      ":scope > div"
+      ":scope > div",
     ) as NodeListOf<HTMLElement>;
 
     if (!allEvents) return;
@@ -362,22 +362,20 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
 
   return (
     <div className="relative w-full md:w-[300px] h-full md:h-[400px] flex items-center justify-center">
-      <div className="absolute bottom-0 right-0 flex">
+      <div className="absolute z-100 -bottom-[20%] -right-[20%] flex">
         <button ref={next}>{`>`}</button>
       </div>
       <div className="relative flex justify-center items-center">
-        {/* <Image
+        <div
           className="absolute left-1/2 origin-bottom-left"
           style={{
-            minWidth: cardWidth / 4,
-            top: -cardWidth * 1.12,
+            minWidth: 20,
+            top: -cardWidth * 0.83,
             transform: "translateX(-50%)",
           }}
-          width={202}
-          height={382}
-          src="/images/chain-1.png"
-          alt="Chain"
-        /> */}
+        >
+          <EventsRing />
+        </div>
         <div
           className="absolute flex justify-center items-start cursor-grab aspect-2/3"
           style={{ width: cardWidth }}
@@ -389,7 +387,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
               className="absolute w-full"
               style={{
                 color: `var(--${eventColors[n % eventColors.length][1]})`,
-                transformOrigin: "50% -1%",
+                transformOrigin: "50% -0.75%",
                 transition: "rotate 0.3s ease",
               }}
             >
@@ -403,22 +401,18 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
                     // }}
                   >
                     <div
-                      className="absolute top-0 left-1/2 aspect-[1.2/1] overflow-hidden"
+                      className="absolute top-0 left-1/2 aspect-[1.25/1] overflow-hidden"
                       style={{
-                        width: cardWidth / 8,
+                        width: 20,
                       }}
                     >
-                      {/* <Image
-                        className="absolute bottom-0 right-0 min-w-[200%]"
-                        width={202}
-                        height={382}
-                        src="/images/chain-1.png"
-                        alt="Chain"
-                      /> */}
+                      <div className="absolute bottom-0 right-0 min-w-[200%]">
+                        <EventsRing />
+                      </div>
                     </div>
                     {shape.svg(eventColors[n % eventColors.length][0])}
                   </div>
-                ) : null
+                ) : null,
               )}
               <div className="absolute inset-0">
                 <div className="w-full h-full flex items-center justify-center">
