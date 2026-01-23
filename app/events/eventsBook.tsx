@@ -311,8 +311,6 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
     });
   }, [activeCard]);
 
-  //NOTION_API_KEY=ntn_bc2512808666OISnYHFEGt7HFXtsmfQuKHLvr6JyeNY6xy
-
   // Update z-indices and rotation staggering on halfway state change
   useEffect(() => {
     const allEvents = eventCards.current?.querySelectorAll(
