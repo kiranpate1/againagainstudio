@@ -69,9 +69,6 @@ export default function InfoContainer() {
     const formText = openFormRef.current?.querySelector("p");
     if (formText) {
       formText.innerHTML = isFormOpen ? "back →" : "← Sign up to get involved";
-      formText.style.transform = isFormOpen
-        ? "translateX(0px)"
-        : "translateX(130px)";
     }
 
     function toggleForm() {
@@ -147,13 +144,13 @@ export default function InfoContainer() {
         </div>
         <div className="relative lg:absolute lg:inset-[64px_20px_auto_auto] lg:w-[48vw] max-w-[558px] duration-600 ease-in-out transition-transform">
           <Image
-            className="w-full"
+            className="absolute lg:relative inset-0 w-full h-full"
             src="/images/info-3.png"
             alt="Info"
             width={558}
             height={439}
           />
-          <div className="absolute inset-[0_25%_0%_10%] lg:inset-[0_15%_0_10%] p-4 lg:p-8 flex flex-col gap-5 justify-center lg:justify-end text-(--kiln-fire)">
+          <div className="relative lg:absolute inset-0 lg:inset-[0_15%_0_10%] p-[20px_25%_20px_15%] lg:p-8 max-w-[450px] flex flex-col gap-5 justify-center lg:justify-end text-(--kiln-fire)">
             <p className="paragraph uppercase">THE SPACE</p>
             <p className="paragraph text-pretty">
               Our space in Downtown Toronto opened in January 2026. It sits at
@@ -174,9 +171,9 @@ export default function InfoContainer() {
             width={970}
             height={524}
           />
-          <div className="absolute inset-[12%_0_12%_0] lg:inset-[0_20%_0_20%] p-8 flex gap-5 items-center lg:items-start text-(--bisqueware)">
+          <div className="absolute inset-0 lg:inset-[0_20%_0_20%] p-8 flex flex-col lg:flex-row gap-5 items-center lg:items-start justify-center lg:justify-start text-(--bisqueware)">
             <p className="paragraph uppercase">OUR STORY</p>
-            <p className="paragraph text-pretty">
+            <p className="paragraph text-pretty text-center lg:text-left">
               My creative career began with community. Growing up, I was
               surrounded by peers, mentors, and teachers who encouraged me to
               pursue a creative path. After hearing countless stories of
@@ -207,11 +204,8 @@ export default function InfoContainer() {
             width={411}
             height={91}
           />
-          <div className="absolute inset-0 p-8 flex gap-5 text-(--kiln-fire) overflow-hidden">
-            <p
-              className="paragraph duration-200 ease-in-out"
-              style={{ transform: "translateX(130px)" }}
-            >
+          <div className="absolute inset-0 p-8 flex justify-end gap-5 text-(--kiln-fire) overflow-hidden">
+            <p className="paragraph duration-200 ease-in-out">
               ← Sign up to get involved
             </p>
           </div>

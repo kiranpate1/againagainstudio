@@ -368,7 +368,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
       </div>
       <div className="relative flex justify-center items-center">
         <div
-          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[27vh]"
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[22vh] lg:max-w-[30vh]"
           style={{ width: cardWidth }}
         >
           <div
@@ -383,7 +383,7 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
           </div>
         </div>
         <div
-          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[27vh]"
+          className="absolute flex justify-center items-start cursor-grab aspect-2/3 max-w-[22vh] lg:max-w-[30vh]"
           style={{ width: cardWidth }}
           ref={eventCards}
         >

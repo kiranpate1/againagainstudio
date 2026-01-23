@@ -81,7 +81,15 @@ export default function Calendar({ events }: props) {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <div className="relative h-full md:h-auto w-auto md:w-full overflow-y-scroll md:overflow-x-scroll">
+      <div 
+        className="relative h-full md:h-auto w-auto md:w-full overflow-y-scroll md:overflow-x-scroll"
+        onWheel={(e) => {
+          if (window.innerWidth >= 768) { // md breakpoint
+        e.currentTarget.scrollLeft += e.deltaY;
+        e.preventDefault();
+          }
+        }}
+      >
         <div
           className="h-max md:w-max flex flex-col md:flex-row gap-2 items-center py-12 lg:py-4 md:px-4"
           ref={calendarRef}

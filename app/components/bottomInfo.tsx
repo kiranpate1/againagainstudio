@@ -18,7 +18,7 @@ export default function BottomInfo() {
         />
       </svg>
 
-      <div className="relative flex flex-col lg:flex-row items-center gap-4 lg:gap-20 text-(--kiln-fire)">
+      <div className="relative flex flex-col lg:flex-row items-center gap-2 lg:gap-20 text-(--kiln-fire)">
         <a
           className="paragraph cursor hover:opacity-70"
           href="https://instagram.com/againagain.studio"
