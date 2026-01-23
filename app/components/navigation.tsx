@@ -70,9 +70,51 @@ export default function Navigation() {
   }, [pathname]);
 
   return (
-    <nav className="fixed z-100 inset-[8px_16px_auto_16px] p-2 flex justify-between items-center">
-      <Link href="/">
+    <nav className="fixed z-100 inset-[8px_16px_auto_16px] p-[12px_18px_20px_12px] flex justify-between items-center">
+      <svg
+        className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-full"
+        width="100%"
+        height="100%"
+        viewBox="0 0 1481 57"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M149 50H6L0.5 43V2.5L652 6L664 2.5L1274 0.5L1321.5 7.5L1334.5 0.5H1474L1479.5 46L1476.5 51L1128.5 46L1105.62 50H870L858 55.5L834 50H737.25L304.5 47L289 43L149 50Z"
+          stroke="#461407"
+          fill="var(--bisqueware)"
+        />
+      </svg>
+
+      <Link className="relative" href="/">
         <svg
+          className="block md:hidden"
+          width="41"
+          height="26"
+          viewBox="0 0 41 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.59766 25.4702H1.14148L6.99157 13.5805L0 12.1973V0H15.41V8.80214L9.59766 25.4702Z"
+            fill="#461407"
+          />
+          <path
+            d="M36.2795 16.1345H33.9609V0H40.5652L36.2795 16.1345Z"
+            fill="#461407"
+          />
+          <path
+            d="M21.513 -2.0557e-07C24.5122 -9.07539e-08 26.8828 2.25145 26.8828 4.89672L24.5729 13.1917L20.3296 13.1917L21.513 9.15759C18.6228 9.15759 15.9915 7.19674 15.9915 4.78969C15.9915 2.38265 18.0848 -3.36809e-07 21.513 -2.0557e-07Z"
+            fill="#461407"
+          />
+          <path
+            d="M26.8828 7.00176L27.6311 5.1354L27.9107 0H33.3712L32.9199 5.1354L31.7595 7.00176H26.8828Z"
+            fill="#461407"
+          />
+        </svg>
+        <svg
+          className="hidden md:block"
           width="197"
           height="24"
           viewBox="0 0 197 24"
@@ -141,7 +183,7 @@ export default function Navigation() {
           />
         </svg>
       </Link>
-      <div className="flex items-center gap-20">
+      <div className="relative flex items-center gap-10 lg:gap-20">
         <Link href="/info">
           <div
             className="uppercase opacity-100 hover:opacity-60 duration-200"

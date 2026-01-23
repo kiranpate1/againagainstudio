@@ -245,21 +245,24 @@ export default function EventsBook({ events, onActiveEventChange }: props) {
       document.addEventListener("touchend", handleTouchEnd);
     };
 
-    next.current?.addEventListener("click", handleNext);
-    eventCards.current?.addEventListener("mousedown", handleMouseDown);
-    eventCards.current?.addEventListener("touchstart", handleTouchStart);
+    const nextButton = next.current;
+    const cardsContainer = eventCards.current;
+
+    nextButton?.addEventListener("click", handleNext);
+    cardsContainer?.addEventListener("mousedown", handleMouseDown);
+    cardsContainer?.addEventListener("touchstart", handleTouchStart);
 
     return () => {
-      next.current?.removeEventListener("click", handleNext);
-      eventCards.current?.removeEventListener("mousedown", handleMouseDown);
-      eventCards.current?.removeEventListener("touchstart", handleTouchStart);
+      nextButton?.removeEventListener("click", handleNext);
+      cardsContainer?.removeEventListener("mousedown", handleMouseDown);
+      cardsContainer?.removeEventListener("touchstart", handleTouchStart);
       // Clean up any lingering listeners
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [cardWidth]);
+  }, [cardWidth, events.length]);
 
   // Handle active card change
   useEffect(() => {

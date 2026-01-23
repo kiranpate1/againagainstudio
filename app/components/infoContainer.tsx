@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { submitContactForm } from "../actions/sendForm";
 import { usePathname, useRouter } from "next/navigation";
+import BottomInfo from "./bottomInfo";
 import Image from "next/image";
 
 export default function InfoContainer() {
@@ -34,7 +35,6 @@ export default function InfoContainer() {
       } else {
         formRef.current.classList.add("lg:opacity-0");
       }
-      formRef.current.style.pointerEvents = isFormOpen ? "auto" : "none";
     }
 
     if (infoRef.current) {
@@ -125,7 +125,7 @@ export default function InfoContainer() {
       }}
     >
       <div
-        className={`relative z-2 w-full lg:h-full flex flex-col items-center p-5 lg:p-0 gap-4 ${pathname === "/contact" ? "hidden lg:flex" : ""}`}
+        className={`relative z-2 w-full lg:h-full flex flex-col items-center p-[100px_20px_0px_20px] lg:p-0 gap-4 ${pathname === "/contact" ? "hidden lg:flex" : ""}`}
         ref={infoRef}
       >
         <div className="relative lg:absolute lg:inset-[120px_auto_auto_20px] lg:w-[48vw] max-w-[439px] duration-600 ease-in-out transition-transform">
@@ -218,7 +218,7 @@ export default function InfoContainer() {
         </div>
       </div>
       <div
-        className="relative lg:absolute z-1 w-full max-w-[456px] flex flex-col gap-5 lg:opacity-0 duration-300"
+        className="relative lg:absolute z-1 w-full max-w-[456px] p-[100px_20px_80px_20px] lg:p-0 flex flex-col gap-5 lg:opacity-0 duration-300"
         ref={formRef}
       >
         <p className="paragraph text-pretty text-(--kiln-fire)">
@@ -291,6 +291,7 @@ export default function InfoContainer() {
           )}
         </form>
       </div>
+      <BottomInfo />
     </div>
   );
 }
