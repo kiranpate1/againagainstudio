@@ -33,7 +33,7 @@ export default function Calendar({ events }: props) {
   const getDateString = (date: Date): string => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   };
 
@@ -83,7 +83,7 @@ export default function Calendar({ events }: props) {
       </svg>
       <div className="relative h-full md:h-auto w-auto md:w-full overflow-y-scroll md:overflow-x-scroll">
         <div
-          className="h-max md:w-max flex flex-col md:flex-row gap-2 items-center py-4 md:px-4"
+          className="h-max md:w-max flex flex-col md:flex-row gap-2 items-center py-12 lg:py-4 md:px-4"
           ref={calendarRef}
         >
           {days.map((day, index) => {
@@ -117,7 +117,7 @@ export default function Calendar({ events }: props) {
                 {hasEvents && (
                   <div className="absolute z-1 inset-0 flex items-center justify-center pointer-events-none scale-50">
                     {shapes[eventIndex % shapes.length].svg(
-                      eventColors[eventIndex % eventColors.length][0]
+                      eventColors[eventIndex % eventColors.length][0],
                     )}
                   </div>
                 )}

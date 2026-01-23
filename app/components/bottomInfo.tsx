@@ -1,6 +1,6 @@
 export default function BottomInfo() {
   return (
-    <nav className="relative lg:fixed z-100 lg:inset-[auto_16px_8px_16px] p-[0px_20px_20px_20px] lg:p-[12px_18px_20px_12px] flex flex-col lg:flex-row gap-4 justify-between items-center">
+    <nav className="relative lg:fixed z-100 lg:inset-[auto_16px_8px_16px] p-[0px_20px_100px_20px] lg:p-[12px_18px_20px_12px] flex flex-col lg:flex-row gap-4 justify-between items-center">
       <svg
         className="hidden lg:block absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-full"
         width="100%"
@@ -14,6 +14,7 @@ export default function BottomInfo() {
           d="M149 50H6L0.5 43V2.5L652 6L664 2.5L1274 0.5L1321.5 7.5L1334.5 0.5H1474L1479.5 46L1476.5 51L1128.5 46L1105.62 50H870L858 55.5L834 50H737.25L304.5 47L289 43L149 50Z"
           stroke="#461407"
           fill="var(--bisqueware)"
+          vectorEffect="non-scaling-stroke"
         />
       </svg>
 
