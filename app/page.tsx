@@ -1,5 +1,4 @@
 import { getNotionEvents } from "@/app/actions/getEvents";
-import Navigation from "./components/navigation";
 import EventsWrapper from "./events/EventsWrapper";
 
 export default async function Home() {
