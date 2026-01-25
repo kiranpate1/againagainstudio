@@ -69,6 +69,8 @@ export default function Navigation() {
     }
   }, [pathname]);
 
+  //test
+
   return (
     <nav className="fixed z-100 inset-[8px_16px_auto_16px] p-[12px_18px_20px_12px] flex justify-between items-center">
       <svg
