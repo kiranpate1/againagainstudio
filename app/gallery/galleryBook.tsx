@@ -81,7 +81,7 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
         // return (
         //   Math.pow(2, -13 * t) * Math.sin((Math.pow(t, 1.5) * 10 - 0.75) * c4) + 1
         // );
-        return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+        return Math.pow(2, -18 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
       };
 
       function step(timestamp: number) {
@@ -140,7 +140,7 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
       }
 
       // Scale maxAngle based on drag amount (0-360 maps to 0-15)
-      const maxPossibleAngle = 15;
+      const maxPossibleAngle = 8;
       const maxAngle = Math.min(
         maxPossibleAngle,
         (Math.abs(dragAmount) / 360) * maxPossibleAngle,

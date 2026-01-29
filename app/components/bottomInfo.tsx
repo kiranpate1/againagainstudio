@@ -26,13 +26,13 @@ export default function BottomInfo() {
         >
           Instagram
         </a>
-        <a
+        {/* <a
           className="paragraph cursor hover:opacity-70"
           href="/"
           target="_blank"
         >
           Discord
-        </a>
+        </a> */}
         <a
           className="paragraph cursor hover:opacity-70"
           href="mailto:hello@againagain.studio"

@@ -66,7 +66,7 @@ export default function Links({ events }: Props) {
             colors={["glaze", "slip"]}
           />
           <div className="flex gap-2">
-            <a
+            {/* <a
               className="flex-1 relative w-16 h-16 flex items-center justify-center hover:opacity-60"
               href="https://www.instagram.com/againagain.studio/"
               target="_blank"
@@ -100,7 +100,7 @@ export default function Links({ events }: Props) {
                   fill="var(--copper)"
                 />
               </svg>
-            </a>
+            </a> */}
             <a
               className="flex-1 relative w-16 h-16 flex items-center justify-center hover:opacity-60"
               href="https://www.instagram.com/againagain.studio/"
@@ -138,7 +138,7 @@ export default function Links({ events }: Props) {
             </a>
             <a
               className="flex-1 relative w-16 h-16 flex items-center justify-center hover:opacity-60"
-              href="https://www.instagram.com/againagain.studio/"
+              href="mailto:hello@againagain.studio"
               target="_blank"
               rel="noopener noreferrer"
             >

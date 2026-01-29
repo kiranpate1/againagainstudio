@@ -58,7 +58,7 @@ export default function GalleryWrapper() {
                 className="w-6 h-6 flex items-center justify-center cursor-pointer"
                 onClick={handleNextCard}
               >
-                <svg
+                {/* <svg
                   width="16"
                   height="16"
                   viewBox="0 0 16 16"
@@ -69,7 +69,7 @@ export default function GalleryWrapper() {
                     d="M14.85 6.69078L7.14 1.55078L6.44 2.55078L13.56 7.33078H0.5V8.58078H13.26L6.43 13.4408L7.15 14.4408L14.85 9.00078C15.0462 8.87422 15.2081 8.70124 15.3215 8.49717C15.4349 8.29309 15.4962 8.06421 15.5 7.83078C15.493 7.60212 15.4302 7.37864 15.3168 7.17991C15.2035 6.98117 15.0432 6.81323 14.85 6.69078Z"
                     fill="#96484E"
                   />
-                </svg>
+                </svg> */}
               </button>
             </div>
           </div>
