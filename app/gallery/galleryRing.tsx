@@ -1,4 +1,4 @@
-const EventsRing = () => {
+const GalleryRing = () => {
   return (
     <svg
       width="40"
@@ -19,4 +19,4 @@ const EventsRing = () => {
   );
 };
 
-export default EventsRing;
+export default GalleryRing;

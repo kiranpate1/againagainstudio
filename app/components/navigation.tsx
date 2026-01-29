@@ -7,6 +7,7 @@ import Link from "next/link";
 export default function Navigation() {
   const navInfo = useRef<HTMLDivElement>(null);
   const navEvents = useRef<HTMLDivElement>(null);
+  const navGallery = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -17,8 +18,11 @@ export default function Navigation() {
     const eventsLetters = navEvents.current?.querySelectorAll(
       "p",
     ) as NodeListOf<HTMLElement>;
+    const galleryLetters = navGallery.current?.querySelectorAll(
+      "p",
+    ) as NodeListOf<HTMLElement>;
 
-    if (pageSlug === "info") {
+    if (pageSlug === "") {
       infoLetters[0]?.style.setProperty(
         "transform",
         "translate(10%,0%) rotate(3deg)",
@@ -35,33 +39,37 @@ export default function Navigation() {
         "transform",
         "translate(-10%,0%) rotate(-20deg)",
       );
-      eventsLetters?.forEach((letter) => {
+      galleryLetters?.forEach((letter) => {
         letter.style.setProperty("transform", "rotate(0deg)");
       });
-    } else if (pageSlug === "") {
-      eventsLetters[0]?.style.setProperty(
+    } else if (pageSlug === "gallery") {
+      galleryLetters[0]?.style.setProperty(
         "transform",
         "translate(20%,0%) rotate(-10deg)",
       );
-      eventsLetters[1]?.style.setProperty(
+      galleryLetters[1]?.style.setProperty(
         "transform",
         "translate(12%,-6%) rotate(0deg)",
       );
-      eventsLetters[2]?.style.setProperty(
+      galleryLetters[2]?.style.setProperty(
         "transform",
         "translate(4%,0%) rotate(8deg)",
       );
-      eventsLetters[3]?.style.setProperty(
+      galleryLetters[3]?.style.setProperty(
         "transform",
         "translate(-4%,4%) rotate(0deg)",
       );
-      eventsLetters[4]?.style.setProperty(
+      galleryLetters[4]?.style.setProperty(
         "transform",
         "translate(-12%,-8%) rotate(6deg)",
       );
-      eventsLetters[5]?.style.setProperty(
+      galleryLetters[5]?.style.setProperty(
         "transform",
         "translate(-20%,0%) rotate(-20deg)",
+      );
+      galleryLetters[6]?.style.setProperty(
+        "transform",
+        "translate(-28%,8%) rotate(10deg)",
       );
       infoLetters?.forEach((letter) => {
         letter.style.setProperty("transform", "rotate(0deg)");
@@ -186,7 +194,7 @@ export default function Navigation() {
           />
         </svg>
       </Link>
-      <div className="relative flex items-center gap-10 lg:gap-20">
+      <div className="relative flex items-center gap-4 lg:gap-20">
         <Link href="/">
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
@@ -232,6 +240,34 @@ export default function Navigation() {
             </p>
             <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
               s
+            </p>
+          </div>
+        </Link>
+        <Link href="/gallery">
+          <div
+            className="group uppercase opacity-100 hover:opacity-60 duration-100"
+            ref={navGallery}
+          >
+            <p className="inline-block duration-200 ease-in-out group-hover:rotate-3">
+              G
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
+              a
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:rotate-[4deg]">
+              l
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-20">
+              l
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:rotate-3">
+              e
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
+              r
+            </p>
+            <p className="inline-block duration-200 ease-in-out group-hover:rotate-[4deg]">
+              y
             </p>
           </div>
         </Link>
