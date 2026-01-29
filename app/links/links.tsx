@@ -55,7 +55,7 @@ export default function Links({ events }: Props) {
           </div>
           <LinkCard
             title={"About the space"}
-            link={"/info"}
+            link={"/"}
             date={""}
             colors={["florals", "slip"]}
           />

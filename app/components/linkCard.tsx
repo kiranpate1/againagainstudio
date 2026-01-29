@@ -39,7 +39,7 @@ export default function LinkCard({ title, date, link, colors }: Props) {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <p className="flex-1 paragraph text-pretty">{title}</p>
+      <p className="flex-1 paragraph text-balance">{title}</p>
       <p className="paragraph">
         {date &&
           new Date(date).toLocaleDateString("en-US", {
