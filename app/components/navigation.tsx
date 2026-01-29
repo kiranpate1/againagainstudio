@@ -74,6 +74,13 @@ export default function Navigation() {
       infoLetters?.forEach((letter) => {
         letter.style.setProperty("transform", "rotate(0deg)");
       });
+    } else {
+      infoLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
+      galleryLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
     }
   }, [pathname]);
 
