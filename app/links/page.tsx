@@ -1,5 +1,5 @@
 import { getNotionEvents } from "@/app/actions/getEvents";
-import Links from "../events/links";
+import Links from "./links";
 
 export default async function Home() {
   const events = await getNotionEvents();
