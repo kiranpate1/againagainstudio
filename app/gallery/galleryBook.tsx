@@ -123,6 +123,16 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
       dragDirection: number = 1,
       initialAngle: number = 0,
     ) => {
+      // Get the actual current angle from the element if animation is running
+      let actualCurrentAngle = initialAngle;
+      if (momentumRef.current) {
+        const transform = momentumRef.current.style.transform;
+        const match = transform.match(/rotateZ\(([-\d.]+)deg\)/);
+        if (match) {
+          actualCurrentAngle = parseFloat(match[1]);
+        }
+      }
+
       // Cancel any existing pendulum animation
       if (pendulumAnimationId.current !== null) {
         cancelAnimationFrame(pendulumAnimationId.current);
@@ -146,14 +156,24 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
       const dampingFactor = 0.92; // How quickly the pendulum loses energy (closer to 1 = slower damping)
       const minAngle = 0.1; // Stop when swing is less than this
 
-      // Calculate phase offset to start from initialAngle
+      // Calculate phase offset to start from actualCurrentAngle smoothly
       const frequency = (2 * Math.PI) / swingDuration;
       let phaseOffset = 0;
-      if (Math.abs(initialAngle) > 0.01) {
-        // Calculate where in the cycle we should start to match initialAngle
-        phaseOffset = Math.asin(
-          Math.max(-1, Math.min(1, initialAngle / effectiveMaxAngle)),
-        );
+
+      if (Math.abs(actualCurrentAngle) > 0.01) {
+        // Normalize the angle to the effective max angle
+        const normalizedAngle =
+          actualCurrentAngle / (effectiveMaxAngle * -dragDirection);
+        const clampedNormalized = Math.max(-1, Math.min(1, normalizedAngle));
+
+        // Use asin to get the phase, accounting for the current position
+        // This ensures smooth continuation from the current angle
+        phaseOffset = Math.asin(clampedNormalized);
+
+        // Adjust for the correct quadrant if needed
+        if (Math.abs(actualCurrentAngle) > effectiveMaxAngle * 0.5) {
+          phaseOffset = Math.PI - phaseOffset;
+        }
       }
 
       let startTime: number | null = null;
@@ -485,7 +505,7 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
         />
         <div className="relative h-full flex justify-center items-center">
           <div
-            className="absolute h-full flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh] lg:max-w-[30vh]"
+            className="absolute h-full flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh]"
             style={{ width: cardWidth }}
           >
             <div
@@ -500,7 +520,7 @@ const GalleryBook = forwardRef<GalleryBookHandle, props>(
             </div>
           </div>
           <div
-            className="absolute h-full flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh] lg:max-w-[30vh]"
+            className="absolute h-full flex justify-center items-start cursor-grab aspect-2/3 max-w-[30vh]"
             style={{ width: cardWidth }}
             ref={galleryCards}
           >

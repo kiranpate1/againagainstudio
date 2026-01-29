@@ -22,7 +22,7 @@ export default function GalleryWrapper() {
   };
 
   return (
-    <div className="absolute inset-[166px_0_0_0] lg:inset-[190px_0_0_0] flex flex-col justify-center items-center">
+    <div className="absolute inset-[166px_0_0_0] lg:inset-[190px_0_0_0] flex flex-col justify-start items-center">
       <div className="relative w-[300px] max-w-[30vh] translate-x-[5%] aspect-2/3">
         <GalleryBook
           ref={galleryBookRef}
