@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@variant lg (@media (min-width: 1024px) and (min-height: 800px));
+/* @variant lg (@media (min-width: 1024px) and (min-height: 800px)); */
 
 :root {
   --bisqueware: #fff7e6;
