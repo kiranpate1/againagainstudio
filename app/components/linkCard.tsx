@@ -41,12 +41,12 @@ export default function LinkCard({ title, date, link, colors }: Props) {
       </svg>
       <div className="flex-1 paragraph text-balance">
         <p className="inline">{title}</p>{" "}
-        <div
-          className="-rotate-45"
+        <span
+          className="inline-block -rotate-45"
           style={{ display: date ? "inline-block" : "none" }}
         >
           →
-        </div>
+        </span>
       </div>
       <p className="paragraph">
         {date &&
