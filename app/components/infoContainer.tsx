@@ -79,7 +79,7 @@ export default function InfoContainer() {
       if (newFormState) {
         router.push("/contact");
       } else {
-        router.push("/info");
+        router.push("/");
       }
     }
 
@@ -111,7 +111,7 @@ export default function InfoContainer() {
   }
 
   // Determine visibility based on route
-  const isVisible = pathname === "/info" || pathname === "/contact";
+  const isVisible = pathname === "/" || pathname === "/contact";
 
   return (
     <div
@@ -122,10 +122,10 @@ export default function InfoContainer() {
       }}
     >
       <div
-        className={`relative z-2 w-full lg:h-full flex flex-col items-center p-[100px_20px_0px_20px] lg:p-0 gap-4 ${pathname === "/contact" ? "hidden lg:flex" : ""}`}
+        className={`relative z-2 w-full max-w-[1600px] lg:h-full lg:max-h-[1200px] flex flex-col items-center p-[100px_20px_0px_20px] lg:p-0 gap-4 ${pathname === "/contact" ? "hidden lg:flex" : ""}`}
         ref={infoRef}
       >
-        <div className="relative lg:absolute lg:inset-[120px_auto_auto_20px] lg:w-[48vw] max-w-[439px] duration-600 ease-in-out transition-transform">
+        <div className="relative lg:absolute lg:inset-[10%_auto_auto_20px] lg:w-[48vw] max-w-[439px] duration-600 ease-in-out transition-transform">
           <Image
             className="w-full"
             src="/images/info-1.png"
@@ -142,7 +142,7 @@ export default function InfoContainer() {
             </p>
           </div>
         </div>
-        <div className="relative lg:absolute lg:inset-[64px_20px_auto_auto] lg:w-[48vw] max-w-[558px] duration-600 ease-in-out transition-transform">
+        <div className="relative lg:absolute lg:inset-[4%_20px_auto_auto] lg:w-[558px] max-w-[558px] lg:max-w-[40vw] duration-600 ease-in-out transition-transform">
           <Image
             className="absolute lg:relative inset-0 w-full h-full"
             src="/images/info-3.png"
@@ -163,15 +163,15 @@ export default function InfoContainer() {
             </p>
           </div>
         </div>
-        <div className="relative lg:absolute lg:inset-[auto_auto_64px_20px] w-full lg:w-auto max-w-[500px] lg:max-w-[970px] lg:h-full lg:max-h-[53vh] aspect-524/970 lg:aspect-auto flex lg:block items-center justify-center duration-600 ease-in-out transition-transform">
+        <div className="relative lg:absolute lg:inset-[auto_auto_64px_20px] w-full lg:w-auto max-w-[500px] lg:max-w-[970px] lg:h-[53vh] lg:max-h-[500px] aspect-524/970 lg:aspect-auto flex items-center lg:items-end justify-center duration-600 ease-in-out transition-transform">
           <Image
-            className="relative w-[calc(970/524*(100vw-40px))] max-w-[calc(970/524*500px)] lg:w-full lg:h-full rotate-90 lg:rotate-0"
+            className="relative w-[calc(970/524*(100vw-40px))] lg:w-full max-w-[calc(970/524*500px)] lg:h-auto lg:max-h-full rotate-90 lg:rotate-0 lg:aspect-970/524"
             src="/images/info-2.png"
             alt="Info"
             width={970}
             height={524}
           />
-          <div className="absolute inset-0 lg:inset-[0_20%_0_20%] p-8 flex flex-col lg:flex-row gap-5 items-center lg:items-start justify-center lg:justify-start text-(--bisqueware)">
+          <div className="absolute inset-0 lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 w-full max-w-[650px] p-8 flex flex-col lg:flex-row gap-5 items-center lg:items-start justify-center lg:justify-start text-(--bisqueware)">
             <p className="paragraph uppercase">OUR STORY</p>
             <p className="paragraph text-pretty text-center lg:text-left">
               My creative career began with community. Growing up, I was
@@ -194,7 +194,7 @@ export default function InfoContainer() {
           </div>
         </div>
         <div
-          className="relative lg:absolute lg:inset-[550px_20px_auto_auto] lg:w-auto max-w-[411px] hidden lg:block cursor-pointer hover:-hue-rotate-15 pointer-events-auto"
+          className="absolute inset-[550px_20px_auto_auto] w-auto max-w-[25vw] hidden lg:block cursor-pointer hover:-hue-rotate-15 pointer-events-auto"
           ref={openFormRef}
         >
           <Image
@@ -204,7 +204,7 @@ export default function InfoContainer() {
             width={411}
             height={91}
           />
-          <div className="absolute inset-0 p-8 flex justify-end gap-5 text-(--kiln-fire) overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center gap-5 text-(--kiln-fire) overflow-hidden">
             <p className="paragraph duration-200 ease-in-out">
               ← Sign up to get involved
             </p>

@@ -187,7 +187,7 @@ export default function Navigation() {
         </svg>
       </Link>
       <div className="relative flex items-center gap-10 lg:gap-20">
-        <Link href="/info">
+        <Link href="/">
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
             ref={navInfo}
@@ -195,18 +195,22 @@ export default function Navigation() {
             <p className="inline-block duration-200 ease-in-out group-hover:rotate-3">
               I
             </p>
-            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-[11deg]">
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
               n
             </p>
             <p className="inline-block duration-200 ease-in-out group-hover:rotate-[4deg]">
               f
             </p>
-            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-[20deg]">
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-20">
               o
             </p>
           </div>
         </Link>
-        <Link href="/">
+        <Link
+          href="https://luma.com/user/againagain"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
             ref={navEvents}
@@ -214,19 +218,19 @@ export default function Navigation() {
             <p className="inline-block duration-200 ease-in-out group-hover:rotate-3">
               E
             </p>
-            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-[11deg]">
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
               v
             </p>
             <p className="inline-block duration-200 ease-in-out group-hover:rotate-[4deg]">
               e
             </p>
-            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-[20deg]">
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-20">
               n
             </p>
             <p className="inline-block duration-200 ease-in-out group-hover:rotate-3">
               t
             </p>
-            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-[11deg]">
+            <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
               s
             </p>
           </div>
