@@ -22,7 +22,7 @@ export default function GalleryWrapper() {
   };
 
   return (
-    <div className="absolute w-screen h-screen inset-[166px_0_0_0] lg:inset-[190px_0_0_0] flex flex-col justify-start items-center">
+    <div className="absolute w-screen h-screen inset-0 p-[166px_0_0_0] lg:p-[190px_0_0_0] flex flex-col justify-start items-center">
       <div className="relative w-[300px] max-w-[30vh] translate-x-[5%] aspect-2/3">
         <GalleryBook
           ref={galleryBookRef}
@@ -30,9 +30,9 @@ export default function GalleryWrapper() {
           onActiveItemChange={setActiveItem}
         />
       </div>
-      <div className="w-full h-full min-h-[300px] max-w-[500px] relative ">
+      <div className="w-full h-full max-w-[500px] relative ">
         {activeItem && (
-          <div className="absolute flex flex-col gap-2 inset-0 p-4 lg:p-8">
+          <div className="absolute flex flex-col justify-center gap-2 inset-0 p-4 lg:p-8">
             <div className="relative p-4 flex items-center justify-between">
               <svg
                 className="absolute inset-0 pointer-events-none"

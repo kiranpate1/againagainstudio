@@ -5,6 +5,7 @@ import { submitContactForm } from "../actions/sendForm";
 import { usePathname, useRouter } from "next/navigation";
 import BottomInfo from "./bottomInfo";
 import Image from "next/image";
+import { info } from "console";
 
 export default function InfoContainer() {
   const pathname = usePathname();
@@ -43,6 +44,9 @@ export default function InfoContainer() {
 
     const infoBlocks = infoRef.current
       ?.children as HTMLCollectionOf<HTMLDivElement>;
+    const infoParagraphs = infoRef.current?.querySelectorAll(
+      ".paragraph:not(.keep)",
+    ) as NodeListOf<HTMLParagraphElement>;
 
     if (isFormOpen) {
       infoBlocks[0]?.classList.add(
@@ -54,6 +58,10 @@ export default function InfoContainer() {
       infoBlocks[2]?.classList.add(
         "lg:transform-[translate(-30%,80%)_rotateZ(7deg)]",
       );
+      infoParagraphs.forEach((p) => {
+        p.style.transition = "opacity 0.3s ease-in-out";
+        p.style.opacity = "0";
+      });
     } else {
       infoBlocks[0]?.classList.remove(
         "lg:transform-[translate(-33%,0)_rotateZ(6deg)]",
@@ -64,6 +72,10 @@ export default function InfoContainer() {
       infoBlocks[2]?.classList.remove(
         "lg:transform-[translate(-30%,80%)_rotateZ(7deg)]",
       );
+      infoParagraphs.forEach((p) => {
+        p.style.transition = "opacity 0.3s ease-in-out";
+        p.style.opacity = "1";
+      });
     }
 
     const formText = openFormRef.current?.querySelector("p");
@@ -205,7 +217,7 @@ export default function InfoContainer() {
             height={91}
           />
           <div className="absolute inset-0 flex items-center justify-center gap-5 text-(--kiln-fire) overflow-hidden">
-            <p className="paragraph duration-200 ease-in-out">
+            <p className="paragraph keep duration-200 ease-in-out">
               ← Sign up to get involved
             </p>
           </div>

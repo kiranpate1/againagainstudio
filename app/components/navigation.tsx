@@ -276,6 +276,9 @@ export default function Navigation() {
             <p className="inline-block duration-200 ease-in-out group-hover:-rotate-11">
               s
             </p>
+            <span className="paragraph lowercase inline-block translate-y-px -rotate-45">
+              →
+            </span>
           </div>
         </Link>
       </div>
