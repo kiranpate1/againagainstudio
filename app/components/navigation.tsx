@@ -221,7 +221,7 @@ export default function Navigation() {
             </p>
           </div>
         </Link>
-        <Link href="/gallery">
+        {/* <Link href="/gallery">
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
             ref={navGallery}
@@ -248,9 +248,9 @@ export default function Navigation() {
               y
             </p>
           </div>
-        </Link>
+        </Link> */}
         <Link
-          href="https://luma.com/user/againagain"
+          href="https://luma.com/againagain"
           target="_blank"
           rel="noopener noreferrer"
         >

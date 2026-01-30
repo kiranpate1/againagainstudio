@@ -31,7 +31,7 @@ export default function Links({ events }: Props) {
             <h1 className="text-[30px]">Upcoming</h1>
             <a
               className="paragraph hover:opacity-50"
-              href="https://luma.com/user/againagain"
+              href="https://luma.com/againagain"
               target="_blank"
               rel="noopener noreferrer"
             >
