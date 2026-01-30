@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "Again Again Studio",
     images: [
       {
-        url: "/opengraph.png",
+        url: "https://againagainstudio.com/opengraph.png",
         width: 1200,
         height: 630,
         alt: "Again Again Studio",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Again Again Studio",
     description:
       "A place where we invite people to wander into new artistic territories. To try, to tinker, and to begin again as many times as they wish.",
-    images: ["/opengraph.png"],
+    images: ["https://againagainstudio.com/opengraph.png"],
   },
   icons: {
     icon: [
