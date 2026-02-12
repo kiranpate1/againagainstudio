@@ -99,8 +99,8 @@ export default function Navigation() {
       >
         <path
           d="M149 50H6L0.5 43V2.5L652 6L664 2.5L1274 0.5L1321.5 7.5L1334.5 0.5H1474L1479.5 46L1476.5 51L1128.5 46L1105.62 50H870L858 55.5L834 50H737.25L304.5 47L289 43L149 50Z"
-          stroke="#461407"
-          fill="var(--bisqueware)"
+          stroke="var(--bisqueware)"
+          fill="var(--kiln-fire)"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
@@ -116,19 +116,19 @@ export default function Navigation() {
         >
           <path
             d="M9.59766 25.4702H1.14148L6.99157 13.5805L0 12.1973V0H15.41V8.80214L9.59766 25.4702Z"
-            fill="#461407"
+            fill="currentColor"
           />
           <path
             d="M36.2795 16.1345H33.9609V0H40.5652L36.2795 16.1345Z"
-            fill="#461407"
+            fill="currentColor"
           />
           <path
             d="M21.513 -2.0557e-07C24.5122 -9.07539e-08 26.8828 2.25145 26.8828 4.89672L24.5729 13.1917L20.3296 13.1917L21.513 9.15759C18.6228 9.15759 15.9915 7.19674 15.9915 4.78969C15.9915 2.38265 18.0848 -3.36809e-07 21.513 -2.0557e-07Z"
-            fill="#461407"
+            fill="currentColor"
           />
           <path
             d="M26.8828 7.00176L27.6311 5.1354L27.9107 0H33.3712L32.9199 5.1354L31.7595 7.00176H26.8828Z"
-            fill="#461407"
+            fill="currentColor"
           />
         </svg>
         <svg

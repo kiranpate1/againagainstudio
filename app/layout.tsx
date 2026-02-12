@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-(--bisqueware) text-(--kiln-fire)`}
+        className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-(--kiln-fire) text-(--bisqueware) selection:bg-(--bisqueware) selection:text-(--kiln-fire)`}
       >
         <main className="fixed w-screen h-screen overflow-hidden">
           <ProjectContentProvider>
