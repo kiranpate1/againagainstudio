@@ -202,7 +202,7 @@ export default function Navigation() {
         </svg>
       </Link>
       <div className="relative flex items-center gap-4 lg:gap-20">
-        <Link href="/">
+        <Link href="/info">
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
             ref={navInfo}
@@ -249,11 +249,7 @@ export default function Navigation() {
             </p>
           </div>
         </Link> */}
-        <Link
-          href="https://luma.com/againagain"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link href="/">
           <div
             className="group uppercase opacity-100 hover:opacity-60 duration-100"
             ref={navEvents}

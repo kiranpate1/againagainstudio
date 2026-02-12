@@ -12,13 +12,13 @@ export default function BottomInfo() {
       >
         <path
           d="M149 50H6L0.5 43V2.5L652 6L664 2.5L1274 0.5L1321.5 7.5L1334.5 0.5H1474L1479.5 46L1476.5 51L1128.5 46L1105.62 50H870L858 55.5L834 50H737.25L304.5 47L289 43L149 50Z"
-          stroke="#461407"
-          fill="var(--bisqueware)"
+          stroke="var(--bisqueware)"
+          fill="var(--kiln-fire)"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
 
-      <div className="relative flex flex-col lg:flex-row items-center gap-2 lg:gap-20 text-(--kiln-fire)">
+      <div className="relative flex flex-col lg:flex-row items-center gap-2 lg:gap-20 text-(--bisqueware)">
         <a
           className="paragraph cursor hover:opacity-70"
           href="https://instagram.com/againagain.studio"

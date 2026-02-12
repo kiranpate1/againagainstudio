@@ -6,6 +6,7 @@ import { ProjectContentProvider } from "./components/ProjectContentContext";
 import Navigation from "./components/navigation";
 import InfoContainer from "./components/infoContainer";
 import { Syne } from "next/font/google";
+import BottomInfo from "./components/bottomInfo";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -75,8 +76,9 @@ export default function RootLayout({
           <ProjectContentProvider>
             <ViewTransitions>
               <Navigation />
-              <InfoContainer />
+              {/* <InfoContainer /> */}
               {children}
+              <BottomInfo />
             </ViewTransitions>
           </ProjectContentProvider>
         </main>
