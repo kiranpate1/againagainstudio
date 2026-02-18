@@ -6,21 +6,27 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function Contact() {
+  // Drag state refs
   const momentumRef = useRef<HTMLDivElement>(null);
   const swingingRef = useRef<HTMLImageElement>(null);
 
-  // Drag state refs
   const startX = useRef(0);
   const startY = useRef(0);
+  const lastDeltaY = useRef(0);
   const isDragging = useRef(false);
   const currentRotation = useRef(0);
   const pendulumAnimationId = useRef<number | null>(null);
   const currentPendulumAngle = useRef(0);
   const swingingAnimationId = useRef<number | null>(null);
+  const toggleFormRef = useRef<(() => void) | null>(null);
 
+  // Form state
+  const router = useRouter();
   const pathname = usePathname();
+  const contactRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const [isFormOpen, setIsFormOpen] = useState(pathname === "/contact");
+  const isFormOpenRef = useRef(pathname === "/contact");
 
   // Sync form state with pathname changes
   useEffect(() => {
@@ -33,34 +39,29 @@ export default function Contact() {
   }, [pathname]);
 
   useEffect(() => {
-    if (!formRef.current) return;
-
     // Apply UI changes based on isFormOpen state
-    if (formRef.current) {
+    if (contactRef.current && formRef.current) {
       if (isFormOpen) {
-        formRef.current.classList.remove("-translate-y-full");
+        contactRef.current.classList.add("bg-[rgba(0,0,0,0.5)]");
+        formRef.current.style.transform = "translateY(0)";
       } else {
-        formRef.current.classList.add("-translate-y-full");
+        contactRef.current.classList.remove("bg-[rgba(0,0,0,0.5)]");
+        formRef.current.style.transform = "translateY(-100%)";
       }
     }
 
-    // function toggleForm() {
-    //   const newFormState = !isFormOpen;
-    //   setIsFormOpen(newFormState);
+    isFormOpenRef.current = isFormOpen;
 
-    //   // Navigate based on the new state
-    //   if (newFormState) {
-    //     router.push("/contact");
-    //   } else {
-    //     router.push("/");
-    //   }
-    // }
-
-    // openFormRef.current?.addEventListener("click", toggleForm);
-    // return () => {
-    //   openFormRef.current?.removeEventListener("click", toggleForm);
-    // };
-  }, [isFormOpen]);
+    toggleFormRef.current = () => {
+      const newFormState = !isFormOpen;
+      setIsFormOpen(newFormState);
+      if (newFormState) {
+        router.push("/contact");
+      } else {
+        router.push("/");
+      }
+    };
+  }, [isFormOpen, router]);
 
   // form stuff
 
@@ -237,22 +238,47 @@ export default function Contact() {
 
       startX.current = clientX;
       startY.current = clientY;
+      lastDeltaY.current = 0;
       isDragging.current = true;
       if (swingingRef.current) {
         swingingRef.current.style.cursor = "grabbing";
       }
+      // Pin the form in place with an inline transform so we can animate it during drag
+      if (!isFormOpenRef.current && formRef.current) {
+        formRef.current.style.transition = "none";
+        formRef.current.style.transform = "translateY(-100%)";
+      }
+      if (isFormOpenRef.current && formRef.current) {
+        formRef.current.style.transition = "none";
+        formRef.current.style.transform = "translateY(0)";
+      }
     };
 
     // Unified drag move logic
-    const moveDrag = (clientX: number) => {
+    const moveDrag = (clientX: number, clientY: number) => {
       if (!isDragging.current || !swingingRef.current) return;
 
       const deltaX = clientX - startX.current;
+      const deltaY = clientY - startY.current;
+      lastDeltaY.current = deltaY;
+
       // Convert drag distance to rotation angle (inverted)
       const rotation = -(deltaX / 100) * 10; // Adjust sensitivity as needed
 
       swingingRef.current.style.transform = `rotateZ(${rotation}deg)`;
       currentRotation.current = rotation;
+
+      // Form follows downward drag when closed
+      if (!isFormOpenRef.current && formRef.current) {
+        const clampedDelta = Math.max(0, deltaY);
+        formRef.current.style.transform = `translateY(calc(-100% + ${clampedDelta}px))`;
+      }
+
+      // Form follows upward drag when open
+      if (isFormOpenRef.current && formRef.current) {
+        const clampedDelta = Math.min(0, deltaY);
+        formRef.current.style.transform = `translateY(${clampedDelta}px)`;
+      }
     };
 
     // Unified drag end logic
@@ -262,8 +288,96 @@ export default function Contact() {
         swingingRef.current.style.cursor = "grab";
       }
 
+      const draggedDown = lastDeltaY.current;
+      lastDeltaY.current = 0;
+
       // Animate swingingRef back to 0 using custom ease function
       animateSwingingReturn(currentRotation.current);
+
+      // If dragged up enough while open, close the form
+      if (isFormOpenRef.current && draggedDown < -200) {
+        currentRotation.current = 0;
+        if (formRef.current) {
+          formRef.current.style.transition = "transform 0.4s ease-out";
+          formRef.current.style.transform = "translateY(-100%)";
+          formRef.current.addEventListener(
+            "transitionend",
+            () => {
+              if (formRef.current) {
+                formRef.current.style.transition = "";
+              }
+            },
+            { once: true },
+          );
+        }
+        toggleFormRef.current?.();
+        return;
+      }
+
+      // Snap form back to open if upward drag didn't reach threshold
+      if (isFormOpenRef.current && formRef.current) {
+        if (draggedDown < 0) {
+          formRef.current.style.transition = "transform 0.4s ease-out";
+          formRef.current.style.transform = "translateY(0)";
+          formRef.current.addEventListener(
+            "transitionend",
+            () => {
+              if (formRef.current) {
+                formRef.current.style.transition = "";
+              }
+            },
+            { once: true },
+          );
+        } else {
+          formRef.current.style.transition = "";
+          formRef.current.style.transform = "translateY(0)";
+        }
+      }
+
+      // If dragged down enough, treat as drawer handle pull
+      if (!isFormOpenRef.current && draggedDown > 200) {
+        currentRotation.current = 0;
+        // Animate form to fully open, then hand off to state
+        if (formRef.current) {
+          formRef.current.style.transition = "transform 0.4s ease-out";
+          formRef.current.style.transform = "translateY(0)";
+          formRef.current.addEventListener(
+            "transitionend",
+            () => {
+              if (formRef.current) {
+                formRef.current.style.transition = "";
+                // Leave transform at translateY(0); state effect owns it now
+              }
+            },
+            { once: true },
+          );
+        }
+        toggleFormRef.current?.();
+        return;
+      }
+
+      // Snap form back to closed if it was being pulled
+      if (!isFormOpenRef.current && formRef.current) {
+        if (draggedDown > 0) {
+          // Animate back to closed from a partial open position
+          formRef.current.style.transition = "transform 0.4s ease-out";
+          formRef.current.style.transform = "translateY(-100%)";
+          formRef.current.addEventListener(
+            "transitionend",
+            () => {
+              if (formRef.current) {
+                formRef.current.style.transition = "";
+                // Leave transform at translateY(-100%); imperative state owns it
+              }
+            },
+            { once: true },
+          );
+        } else {
+          // No downward movement — restore explicit closed position immediately
+          formRef.current.style.transition = "";
+          formRef.current.style.transform = "translateY(-100%)";
+        }
+      }
 
       // Trigger pendulum animation on momentumRef based on drag amount and direction
       const dragDirection = currentRotation.current >= 0 ? 1 : -1;
@@ -278,7 +392,7 @@ export default function Contact() {
     };
 
     // Mouse event handlers
-    const handleMouseMove = (e: MouseEvent) => moveDrag(e.clientX);
+    const handleMouseMove = (e: MouseEvent) => moveDrag(e.clientX, e.clientY);
     const handleMouseUp = () => {
       endDrag();
       document.removeEventListener("mousemove", handleMouseMove);
@@ -294,7 +408,7 @@ export default function Contact() {
     // Touch event handlers
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
-      moveDrag(e.touches[0].clientX);
+      moveDrag(e.touches[0].clientX, e.touches[0].clientY);
     };
     const handleTouchEnd = () => {
       endDrag();
@@ -340,13 +454,16 @@ export default function Contact() {
   }, []);
 
   return (
-    <div className="fixed z-200 inset-0 w-screen h-screen pointer-events-none">
+    <div
+      className="fixed z-200 inset-0 w-screen h-screen pointer-events-none duration-500"
+      ref={contactRef}
+    >
       <div
-        className="absolute inset-[0_0_auto_0] w-full -translate-y-full ease-out duration-500"
+        className="absolute inset-[0_0_auto_0] w-full ease-out duration-500"
         ref={formRef}
       >
         <div
-          className="absolute z-1 bottom-0 right-48 w-32 aspect-157/709 translate-y-[93%] origin-[33%_6%] pointer-events-auto rotate-0"
+          className="absolute z-1 bottom-0 right-12 lg:right-48 w-20 lg:w-32 aspect-157/709 translate-y-[93%] origin-[33%_6%] rotate-0"
           ref={momentumRef}
         >
           <Image
@@ -357,7 +474,7 @@ export default function Contact() {
             height={209}
           />
           <Image
-            className="absolute top-[25.8%] left-[3%] aspect-157/529 w-full origin-[29%_0%] cursor-grab"
+            className="absolute top-[25.8%] left-[3%] aspect-157/529 w-full origin-[29%_0%] cursor-grab pointer-events-auto"
             ref={swingingRef}
             src="/images/lanyard-new.png"
             alt="lanyard"
