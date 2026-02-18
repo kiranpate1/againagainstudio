@@ -5,6 +5,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { ProjectContentProvider } from "./components/ProjectContentContext";
 import Navigation from "./components/navigation";
 import InfoContainer from "./components/infoContainer";
+import Contact from "./contact/contact";
 import { Syne } from "next/font/google";
 import BottomInfo from "./components/bottomInfo";
 
@@ -77,6 +78,7 @@ export default function RootLayout({
             <ViewTransitions>
               <Navigation />
               {/* <InfoContainer /> */}
+              <Contact />
               {children}
               <BottomInfo />
             </ViewTransitions>
