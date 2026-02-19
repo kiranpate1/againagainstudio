@@ -17,6 +17,8 @@ export default function Contact() {
   const startY = useRef(0);
   const lastDeltaY = useRef(0);
   const isDragging = useRef(false);
+  const hasDragged = useRef(false);
+  const isTouchDevice = useRef(false);
   const currentRotation = useRef(0);
   const pendulumAnimationId = useRef<number | null>(null);
   const currentPendulumAngle = useRef(0);
@@ -31,6 +33,7 @@ export default function Contact() {
   const pathname = usePathname();
   const contactRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const closeContactRef = useRef<HTMLAnchorElement>(null);
   const [isFormOpen, setIsFormOpen] = useState(pathname === "/contact");
   const isFormOpenRef = useRef(pathname === "/contact");
 
@@ -54,6 +57,14 @@ export default function Contact() {
         contactRef.current.classList.remove("bg-[rgba(0,0,0,0.5)]");
         formRef.current.style.transform = "translateY(-100%)";
       }
+    }
+
+    if (closeContactRef.current) {
+      closeContactRef.current.addEventListener("click", (e) => {
+        e.preventDefault();
+        setIsFormOpen(false);
+        router.push("/");
+      });
     }
 
     isFormOpenRef.current = isFormOpen;
@@ -285,7 +296,11 @@ export default function Contact() {
   // Handle drag to create pendulum effect
   useEffect(() => {
     // Unified drag start logic
-    const startDrag = (clientX: number, clientY: number) => {
+    const startDrag = (
+      clientX: number,
+      clientY: number,
+      isTouch: boolean = false,
+    ) => {
       // Cancel any ongoing animations
       if (pendulumAnimationId.current !== null) {
         cancelAnimationFrame(pendulumAnimationId.current);
@@ -312,6 +327,8 @@ export default function Contact() {
       startY.current = clientY;
       lastDeltaY.current = 0;
       isDragging.current = true;
+      hasDragged.current = false;
+      isTouchDevice.current = isTouch;
       if (swingingRef.current) {
         swingingRef.current.style.cursor = "grabbing";
       }
@@ -333,6 +350,11 @@ export default function Contact() {
       const deltaX = clientX - startX.current;
       const deltaY = clientY - startY.current;
       lastDeltaY.current = deltaY;
+
+      // Track if significant movement occurred (threshold: 5 pixels)
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        hasDragged.current = true;
+      }
 
       // Convert drag distance to rotation angle (inverted)
       const rotation = -(deltaX / 100) * 10; // Adjust sensitivity as needed
@@ -362,6 +384,17 @@ export default function Contact() {
 
       const draggedDown = lastDeltaY.current;
       lastDeltaY.current = 0;
+
+      // Handle tap/click on mobile to open form
+      if (
+        isTouchDevice.current &&
+        !hasDragged.current &&
+        !isFormOpenRef.current
+      ) {
+        toggleFormRef.current?.();
+        currentRotation.current = 0;
+        return;
+      }
 
       // Animate swingingRef back to 0 using custom ease function
       animateSwingingReturn(currentRotation.current);
@@ -495,7 +528,7 @@ export default function Contact() {
     };
     const handleMouseDown = (e: MouseEvent) => {
       e.preventDefault();
-      startDrag(e.clientX, e.clientY);
+      startDrag(e.clientX, e.clientY, false);
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     };
@@ -513,7 +546,7 @@ export default function Contact() {
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
       const touch = e.touches[0];
-      startDrag(touch.clientX, touch.clientY);
+      startDrag(touch.clientX, touch.clientY, true);
       document.addEventListener("touchmove", handleTouchMove, {
         passive: false,
       });
@@ -563,75 +596,95 @@ export default function Contact() {
       ref={contactRef}
     >
       <div
-        className="absolute inset-[0_0_auto_0] w-full ease-out duration-500"
+        className="absolute inset-[0_0_auto_0] w-full ease-out duration-300 bg-(--slip) text-(--charm)"
         style={{ transform: "translateY(-100%)" }}
         ref={formRef}
       >
-        <div
-          className="absolute z-1 bottom-0 right-12 lg:right-48 w-20 lg:w-30 aspect-148/805 translate-y-[93%] origin-[33%_6%] rotate-0"
-          ref={momentumRef}
-        >
-          <Image
-            className="absolute top-0 left-0 aspect-103/209 w-103/148"
-            src="/images/chain-new.png"
-            alt="Chain"
-            width={103}
-            height={209}
-          />
-          <div
-            className="absolute top-[22.6%] left-[2.5%] aspect-148/623 w-full origin-[31%_0%] cursor-grab pointer-events-auto"
-            ref={swingingRef}
+        <div className="absolute bottom-0 right-32 lg:right-76 w-20 lg:w-30 translate-[93%]">
+          <svg
+            className="absolute z-1 top-0 -left-28/148 w-80/148"
+            viewBox="0 0 80 57"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div className="relative aspect-148/205 w-full">
-              <Image
-                className="relative z-1 w-full aspect-148/205"
-                src="/images/lanyard-string.png"
-                alt="Lanyard string"
-                width={148}
-                height={205}
-              />
-              <div
-                className="absolute top-120/205 right-0 w-104/148 origin-[45%_0%]"
-                ref={swingExtra1Ref}
-              >
+            <path
+              d="M0 0H80V1.16667C66.25 1.16667 66.25 21.5833 80 21.5833V57H0V0Z"
+              fill="var(--slip)"
+            />
+          </svg>
+          <div
+            className="relative aspect-148/805 origin-[33%_6%] rotate-0"
+            ref={momentumRef}
+          >
+            <Image
+              className="absolute top-0 left-0 aspect-103/209 w-103/148"
+              src="/images/chain-new.png"
+              alt="Chain"
+              width={103}
+              height={209}
+            />
+            <div
+              className="absolute top-[22.6%] left-[2.5%] aspect-148/623 w-full origin-[31%_0%] cursor-grab pointer-events-auto"
+              ref={swingingRef}
+            >
+              <div className="relative aspect-148/205 w-full">
                 <Image
-                  className="w-full aspect-104/215"
-                  src="/images/con.png"
-                  alt="Con badge"
-                  width={104}
-                  height={215}
+                  className="relative z-1 w-full aspect-148/205"
+                  src="/images/lanyard-string.png"
+                  alt="Lanyard string"
+                  width={148}
+                  height={205}
                 />
                 <div
-                  className="absolute top-206/215 right-2/104 w-116/104 origin-[55%_0%]"
-                  ref={swingExtra2Ref}
+                  className="absolute top-120/205 right-0 w-104/148 origin-[45%_0%]"
+                  ref={swingExtra1Ref}
                 >
                   <Image
-                    className="w-full aspect-116/146"
-                    src="/images/ta.png"
-                    alt="Ta tag"
-                    width={115}
-                    height={146}
+                    className="w-full aspect-104/215"
+                    src="/images/con.png"
+                    alt="Con badge"
+                    width={104}
+                    height={215}
                   />
                   <div
-                    className="absolute top-142/146 right-5/116 w-87/116 origin-[45%_-3%]"
-                    ref={swingExtra3Ref}
+                    className="absolute top-206/215 right-2/104 w-116/104 origin-[55%_0%]"
+                    ref={swingExtra2Ref}
                   >
                     <Image
-                      className="w-full aspect-87/155"
-                      src="/images/ct.png"
-                      alt="Ct badge"
-                      width={87}
-                      height={155}
+                      className="w-full aspect-116/146"
+                      src="/images/ta.png"
+                      alt="Ta tag"
+                      width={115}
+                      height={146}
                     />
+                    <div
+                      className="absolute top-142/146 right-5/116 w-87/116 origin-[45%_-3%]"
+                      ref={swingExtra3Ref}
+                    >
+                      <Image
+                        className="w-full aspect-87/155"
+                        src="/images/ct.png"
+                        alt="Ct badge"
+                        width={87}
+                        height={155}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="relative w-full px-5 pt-15 pb-4 lg:px-15 lg:pb-15 bg-(--slip) text-(--charm) flex justify-center pointer-events-auto">
-          <div className="w-full max-w-[700px] flex flex-col items-stretch gap-8">
+        <div className="relative w-full px-5 pt-15 pb-4 lg:px-15 lg:pb-15 flex justify-center pointer-events-auto">
+          <div className="relative w-full max-w-[700px] flex flex-col items-stretch gap-8">
             <div className="w-full max-w-[500px] flex flex-col gap-1">
+              <a
+                href="/"
+                className="lg:absolute lg:left-0 lg:-translate-x-[calc(100%+2rem)] lg:translate-y-2 caption opacity-50 hover:opacity-100"
+                ref={closeContactRef}
+              >
+                ← Home
+              </a>
               <p className="heading-small text-pretty">
                 Host an event or inquire for private classes
               </p>

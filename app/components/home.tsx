@@ -20,9 +20,9 @@ export default async function Home() {
           Learn more about the space
         </a>
       </div>
-      <div className="flex-1 w-full flex flex-col gap-3 items-start justify-start">
+      <div className="flex-1 w-full flex flex-col gap-3 items-stretch justify-start">
         <p className="paragraph uppercase">Upcoming Events</p>
-        <div className="flex-1 flex gap-6 h-full max-w-full overflow-x-scroll">
+        <div className="flex-1 flex gap-6 h-full overflow-x-scroll">
           {events.map((event: any, index: number) => (
             <a
               key={event.id}
