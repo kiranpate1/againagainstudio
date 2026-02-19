@@ -57,15 +57,15 @@ export const shapes: SvgElement[] = [
               y2="100%"
             >
               <stop offset="0%" stopColor="black" stopOpacity="0" />
-              <stop offset="100%" stopColor="black" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="black" stopOpacity="0.85" />
             </linearGradient>
           </defs>
           <g clipPath="url(#clip-shape-1-gradient)">
             <rect
               x="0"
-              y="293"
+              y="213"
               width="463"
-              height="170"
+              height="250"
               fill="url(#scrim-gradient-1)"
               className="origin-bottom group-hover:scale-y-200"
             />
@@ -126,15 +126,15 @@ export const shapes: SvgElement[] = [
               y2="100%"
             >
               <stop offset="0%" stopColor="black" stopOpacity="0" />
-              <stop offset="100%" stopColor="black" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="black" stopOpacity="0.85" />
             </linearGradient>
           </defs>
           <g clipPath="url(#clip-shape-2-gradient)">
             <rect
               x="0"
-              y="293"
+              y="213"
               width="463"
-              height="170"
+              height="250"
               fill="url(#scrim-gradient-2)"
               className="origin-bottom group-hover:scale-y-200"
             />
@@ -195,15 +195,15 @@ export const shapes: SvgElement[] = [
               y2="100%"
             >
               <stop offset="0%" stopColor="black" stopOpacity="0" />
-              <stop offset="100%" stopColor="black" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="black" stopOpacity="0.85" />
             </linearGradient>
           </defs>
           <g clipPath="url(#clip-shape-3-gradient)">
             <rect
               x="0"
-              y="293"
+              y="213"
               width="463"
-              height="170"
+              height="250"
               fill="url(#scrim-gradient-3)"
               className="origin-bottom group-hover:scale-y-200"
             />
@@ -264,15 +264,15 @@ export const shapes: SvgElement[] = [
               y2="100%"
             >
               <stop offset="0%" stopColor="black" stopOpacity="0" />
-              <stop offset="100%" stopColor="black" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="black" stopOpacity="0.85" />
             </linearGradient>
           </defs>
           <g clipPath="url(#clip-shape-4-gradient)">
             <rect
               x="0"
-              y="293"
+              y="213"
               width="463"
-              height="170"
+              height="250"
               fill="url(#scrim-gradient-4)"
               className="origin-bottom group-hover:scale-y-200"
             />
