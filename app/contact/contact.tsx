@@ -53,9 +53,11 @@ export default function Contact() {
       if (isFormOpen) {
         contactRef.current.classList.add("bg-[rgba(0,0,0,0.5)]");
         formRef.current.style.transform = "translateY(0)";
+        contactRef.current.style.pointerEvents = "none";
       } else {
         contactRef.current.classList.remove("bg-[rgba(0,0,0,0.5)]");
         formRef.current.style.transform = "translateY(-100%)";
+        contactRef.current.style.pointerEvents = "all";
       }
     }
 
@@ -333,13 +335,13 @@ export default function Contact() {
         swingingRef.current.style.cursor = "grabbing";
       }
       // Pin the form in place with an inline transform so we can animate it during drag
-      if (!isFormOpenRef.current && formRef.current) {
-        formRef.current.style.transition = "none";
+      if (!isFormOpenRef.current && formRef.current && contactRef.current) {
         formRef.current.style.transform = "translateY(-100%)";
+        contactRef.current.style.pointerEvents = "all";
       }
-      if (isFormOpenRef.current && formRef.current) {
-        formRef.current.style.transition = "none";
+      if (isFormOpenRef.current && formRef.current && contactRef.current) {
         formRef.current.style.transform = "translateY(0)";
+        contactRef.current.style.pointerEvents = "none";
       }
     };
 
