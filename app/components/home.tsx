@@ -7,7 +7,7 @@ export default async function Home() {
   const events = await getNotionEvents();
 
   return (
-    <div className="relative inset-0 w-screen h-screen min-h-[800px] flex flex-col gap-18 md:gap-14 items-start justify-start px-4 lg:px-10 py-[72px] lg:py-[92px]">
+    <div className="relative inset-0 w-screen h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-8 md:gap-14 items-start justify-start px-4 lg:px-10 py-[72px] lg:py-[92px]">
       <div className="md:w-[80%] flex flex-col items-start gap-2">
         <h1 className="heading-large">
           Again Again is a creative studio in Toronto that curates social events
