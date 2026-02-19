@@ -9,6 +9,9 @@ export default function Contact() {
   // Drag state refs
   const momentumRef = useRef<HTMLDivElement>(null);
   const swingingRef = useRef<HTMLImageElement>(null);
+  const swingExtra1Ref = useRef<HTMLDivElement | null>(null);
+  const swingExtra2Ref = useRef<HTMLDivElement | null>(null);
+  const swingExtra3Ref = useRef<HTMLDivElement | null>(null);
 
   const startX = useRef(0);
   const startY = useRef(0);
@@ -18,6 +21,9 @@ export default function Contact() {
   const pendulumAnimationId = useRef<number | null>(null);
   const currentPendulumAngle = useRef(0);
   const swingingAnimationId = useRef<number | null>(null);
+  const swingExtra1AnimationId = useRef<number | null>(null);
+  const swingExtra2AnimationId = useRef<number | null>(null);
+  const swingExtra3AnimationId = useRef<number | null>(null);
   const toggleFormRef = useRef<(() => void) | null>(null);
 
   // Form state
@@ -222,6 +228,60 @@ export default function Contact() {
     swingingAnimationId.current = requestAnimationFrame(step);
   };
 
+  // Subtle swinging animation for extra hinge points
+  const animateExtraSwing = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    animationIdRef: React.MutableRefObject<number | null>,
+    fromRotation: number,
+    damping: number,
+    delayMs: number,
+  ) => {
+    // Cancel any existing animation
+    if (animationIdRef.current !== null) {
+      cancelAnimationFrame(animationIdRef.current);
+      animationIdRef.current = null;
+    }
+
+    const animDuration = 3000;
+    let start: number | null = null;
+
+    const ease = (t: number) => {
+      if (t === 0 || t === 1) return t;
+      const c4 = (2 * Math.PI) / 5;
+      return Math.pow(2, -8 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+    };
+
+    function step(timestamp: number) {
+      if (start === null) start = timestamp;
+      const elapsed = timestamp - start - delayMs;
+
+      // Wait for delay to pass
+      if (elapsed < 0) {
+        animationIdRef.current = requestAnimationFrame(step);
+        return;
+      }
+
+      const progress = Math.min(elapsed / animDuration, 1);
+      const easedProgress = ease(progress);
+      const currentValue = fromRotation * damping * (1 - easedProgress);
+
+      if (ref.current) {
+        ref.current.style.transform = `rotateZ(${currentValue}deg)`;
+      }
+
+      if (progress < 1) {
+        animationIdRef.current = requestAnimationFrame(step);
+      } else {
+        animationIdRef.current = null;
+        if (ref.current) {
+          ref.current.style.transform = "rotateZ(0deg)";
+        }
+      }
+    }
+
+    animationIdRef.current = requestAnimationFrame(step);
+  };
+
   // Handle drag to create pendulum effect
   useEffect(() => {
     // Unified drag start logic
@@ -234,6 +294,18 @@ export default function Contact() {
       if (swingingAnimationId.current !== null) {
         cancelAnimationFrame(swingingAnimationId.current);
         swingingAnimationId.current = null;
+      }
+      if (swingExtra1AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra1AnimationId.current);
+        swingExtra1AnimationId.current = null;
+      }
+      if (swingExtra2AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra2AnimationId.current);
+        swingExtra2AnimationId.current = null;
+      }
+      if (swingExtra3AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra3AnimationId.current);
+        swingExtra3AnimationId.current = null;
       }
 
       startX.current = clientX;
@@ -293,6 +365,29 @@ export default function Contact() {
 
       // Animate swingingRef back to 0 using custom ease function
       animateSwingingReturn(currentRotation.current);
+
+      // Animate extra swing elements with subtle, delayed swings
+      animateExtraSwing(
+        swingExtra1Ref,
+        swingExtra1AnimationId,
+        currentRotation.current,
+        0.4,
+        50,
+      );
+      animateExtraSwing(
+        swingExtra2Ref,
+        swingExtra2AnimationId,
+        currentRotation.current,
+        0.3,
+        100,
+      );
+      animateExtraSwing(
+        swingExtra3Ref,
+        swingExtra3AnimationId,
+        currentRotation.current,
+        0.25,
+        150,
+      );
 
       // If dragged up enough while open, close the form
       if (isFormOpenRef.current && draggedDown < -200) {
@@ -445,6 +540,15 @@ export default function Contact() {
       if (swingingAnimationId.current !== null) {
         cancelAnimationFrame(swingingAnimationId.current);
       }
+      if (swingExtra1AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra1AnimationId.current);
+      }
+      if (swingExtra2AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra2AnimationId.current);
+      }
+      if (swingExtra3AnimationId.current !== null) {
+        cancelAnimationFrame(swingExtra3AnimationId.current);
+      }
     };
   }, []);
 
@@ -460,27 +564,70 @@ export default function Contact() {
     >
       <div
         className="absolute inset-[0_0_auto_0] w-full ease-out duration-500"
+        style={{ transform: "translateY(-100%)" }}
         ref={formRef}
       >
         <div
-          className="absolute z-1 bottom-0 right-12 lg:right-48 w-20 lg:w-32 aspect-157/709 translate-y-[93%] origin-[33%_6%] rotate-0"
+          className="absolute z-1 bottom-0 right-12 lg:right-48 w-20 lg:w-30 aspect-148/805 translate-y-[93%] origin-[33%_6%] rotate-0"
           ref={momentumRef}
         >
           <Image
-            className="absolute top-0 left-0 aspect-103/209 w-2/3"
+            className="absolute top-0 left-0 aspect-103/209 w-103/148"
             src="/images/chain-new.png"
             alt="Chain"
             width={103}
             height={209}
           />
-          <Image
-            className="absolute top-[25.8%] left-[3%] aspect-157/529 w-full origin-[29%_0%] cursor-grab pointer-events-auto"
+          <div
+            className="absolute top-[22.6%] left-[2.5%] aspect-148/623 w-full origin-[31%_0%] cursor-grab pointer-events-auto"
             ref={swingingRef}
-            src="/images/lanyard-new.png"
-            alt="lanyard"
-            width={157}
-            height={529}
-          />
+          >
+            <div className="relative aspect-148/205 w-full">
+              <Image
+                className="relative z-1 w-full aspect-148/205"
+                src="/images/lanyard-string.png"
+                alt="Lanyard string"
+                width={148}
+                height={205}
+              />
+              <div
+                className="absolute top-120/205 right-0 w-104/148 origin-[45%_0%]"
+                ref={swingExtra1Ref}
+              >
+                <Image
+                  className="w-full aspect-104/215"
+                  src="/images/con.png"
+                  alt="Con badge"
+                  width={104}
+                  height={215}
+                />
+                <div
+                  className="absolute top-206/215 right-2/104 w-116/104 origin-[55%_0%]"
+                  ref={swingExtra2Ref}
+                >
+                  <Image
+                    className="w-full aspect-116/146"
+                    src="/images/ta.png"
+                    alt="Ta tag"
+                    width={115}
+                    height={146}
+                  />
+                  <div
+                    className="absolute top-142/146 right-5/116 w-87/116 origin-[45%_-3%]"
+                    ref={swingExtra3Ref}
+                  >
+                    <Image
+                      className="w-full aspect-87/155"
+                      src="/images/ct.png"
+                      alt="Ct badge"
+                      width={87}
+                      height={155}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="relative w-full px-5 pt-15 pb-4 lg:px-15 lg:pb-15 bg-(--slip) text-(--charm) flex justify-center pointer-events-auto">
           <div className="w-full max-w-[700px] flex flex-col items-stretch gap-8">
