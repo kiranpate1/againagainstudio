@@ -53,11 +53,11 @@ export default function Contact() {
       if (isFormOpen) {
         contactRef.current.classList.add("bg-[rgba(0,0,0,0.5)]");
         formRef.current.style.transform = "translateY(0)";
-        contactRef.current.style.pointerEvents = "none";
+        contactRef.current.style.pointerEvents = "all";
       } else {
         contactRef.current.classList.remove("bg-[rgba(0,0,0,0.5)]");
         formRef.current.style.transform = "translateY(-100%)";
-        contactRef.current.style.pointerEvents = "all";
+        contactRef.current.style.pointerEvents = "none";
       }
     }
 
