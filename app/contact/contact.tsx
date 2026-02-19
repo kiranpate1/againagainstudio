@@ -335,13 +335,11 @@ export default function Contact() {
         swingingRef.current.style.cursor = "grabbing";
       }
       // Pin the form in place with an inline transform so we can animate it during drag
-      if (!isFormOpenRef.current && formRef.current && contactRef.current) {
+      if (!isFormOpenRef.current && formRef.current) {
         formRef.current.style.transform = "translateY(-100%)";
-        contactRef.current.style.pointerEvents = "all";
       }
-      if (isFormOpenRef.current && formRef.current && contactRef.current) {
+      if (isFormOpenRef.current && formRef.current) {
         formRef.current.style.transform = "translateY(0)";
-        contactRef.current.style.pointerEvents = "none";
       }
     };
 
