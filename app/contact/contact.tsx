@@ -385,14 +385,43 @@ export default function Contact() {
       const draggedDown = lastDeltaY.current;
       lastDeltaY.current = 0;
 
-      // Handle tap/click on mobile to open form
-      if (
-        isTouchDevice.current &&
-        !hasDragged.current &&
-        !isFormOpenRef.current
-      ) {
-        toggleFormRef.current?.();
+      // Handle tap/click on mobile to toggle form
+      if (isTouchDevice.current && !hasDragged.current) {
         currentRotation.current = 0;
+
+        if (!isFormOpenRef.current) {
+          // Open form: Animate form to fully open
+          if (formRef.current) {
+            formRef.current.style.transition = "transform 0.4s ease-out";
+            formRef.current.style.transform = "translateY(0)";
+            formRef.current.addEventListener(
+              "transitionend",
+              () => {
+                if (formRef.current) {
+                  formRef.current.style.transition = "";
+                }
+              },
+              { once: true },
+            );
+          }
+        } else {
+          // Close form: Animate form to fully closed
+          if (formRef.current) {
+            formRef.current.style.transition = "transform 0.4s ease-out";
+            formRef.current.style.transform = "translateY(-100%)";
+            formRef.current.addEventListener(
+              "transitionend",
+              () => {
+                if (formRef.current) {
+                  formRef.current.style.transition = "";
+                }
+              },
+              { once: true },
+            );
+          }
+        }
+
+        toggleFormRef.current?.();
         return;
       }
 
