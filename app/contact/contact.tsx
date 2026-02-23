@@ -704,7 +704,7 @@ export default function Contact() {
             </div>
           </div>
         </div>
-        <div className="relative w-full px-5 pt-15 pb-4 lg:px-15 lg:pb-15 flex justify-center pointer-events-auto">
+        <div className="relative w-full px-5 pt-5 lg:pt-15 pb-4 lg:px-15 lg:pb-15 flex justify-center pointer-events-auto">
           <div className="relative w-full max-w-[700px] flex flex-col items-stretch gap-8">
             <div className="w-full max-w-[500px] flex flex-col gap-1">
               <a

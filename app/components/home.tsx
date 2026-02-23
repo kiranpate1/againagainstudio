@@ -7,7 +7,7 @@ export default async function Home() {
   const events = await getNotionEvents();
 
   return (
-    <div className="relative inset-0 w-screen h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-8 md:gap-14 items-start justify-start px-4 pt-18 pb-27 lg:px-10 lg:pt-23 lg:pb-23">
+    <div className="relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23">
       <div className="md:w-[80%] flex flex-col items-start gap-2">
         <h1 className="heading-large">
           Again Again is a creative studio in Toronto that curates social events
@@ -43,11 +43,11 @@ export default async function Home() {
                   </div>,
                 )}
               </div>
-              <div className="absolute z-2 inset-[auto_0_0_0] px-6 py-4 lg:py-6 flex flex-col items-start justify-end gap-3">
+              <div className="absolute z-2 inset-[auto_0_0_0] px-6 py-6 flex flex-col items-start justify-end gap-3">
                 <p className="caption">{formatEventDate(event.date)}</p>
                 <div className="flex flex-col gap-1">
                   <h2 className="paragraph text-balance">{event.eventName}</h2>
-                  <p className="caption text-pretty text-[rgba(255,255,255,0.7)]">
+                  <p className="hidden lg:block caption text-pretty text-[rgba(255,255,255,0.7)]">
                     {event.description}
                   </p>
                 </div>
