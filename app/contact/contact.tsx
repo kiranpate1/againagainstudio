@@ -27,6 +27,7 @@ export default function Contact() {
   const swingExtra2AnimationId = useRef<number | null>(null);
   const swingExtra3AnimationId = useRef<number | null>(null);
   const toggleFormRef = useRef<(() => void) | null>(null);
+  const dragThreshold = 50;
 
   // Form state
   const router = useRouter();
@@ -452,7 +453,7 @@ export default function Contact() {
       );
 
       // If dragged up enough while open, close the form
-      if (isFormOpenRef.current && draggedDown < -100) {
+      if (isFormOpenRef.current && draggedDown < -dragThreshold) {
         currentRotation.current = 0;
         if (formRef.current) {
           formRef.current.style.transition = "transform 0.4s ease-out";
@@ -492,7 +493,7 @@ export default function Contact() {
       }
 
       // If dragged down enough, treat as drawer handle pull
-      if (!isFormOpenRef.current && draggedDown > 100) {
+      if (!isFormOpenRef.current && draggedDown > dragThreshold) {
         currentRotation.current = 0;
         // Animate form to fully open, then hand off to state
         if (formRef.current) {
