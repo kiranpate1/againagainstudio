@@ -629,7 +629,7 @@ export default function Contact() {
         style={{ transform: "translateY(-100%)" }}
         ref={formRef}
       >
-        <div className="absolute bottom-0 right-28 lg:right-78 w-20 lg:w-24 translate-[93.8%]">
+        <div className="absolute bottom-0 right-28 lg:right-78 w-16 lg:w-24 translate-[93.8%]">
           <svg
             className="absolute z-1 top-0 -left-26/107 w-80/107"
             viewBox="0 0 80 50"
