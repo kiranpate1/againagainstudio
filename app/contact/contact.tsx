@@ -434,21 +434,21 @@ export default function Contact() {
         swingExtra1Ref,
         swingExtra1AnimationId,
         currentRotation.current,
-        0.4,
+        0.55,
         50,
       );
       animateExtraSwing(
         swingExtra2Ref,
         swingExtra2AnimationId,
         currentRotation.current,
-        0.3,
+        0.4,
         100,
       );
       animateExtraSwing(
         swingExtra3Ref,
         swingExtra3AnimationId,
         currentRotation.current,
-        0.25,
+        0.3,
         150,
       );
 
