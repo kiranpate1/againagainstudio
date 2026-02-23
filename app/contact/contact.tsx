@@ -452,7 +452,7 @@ export default function Contact() {
       );
 
       // If dragged up enough while open, close the form
-      if (isFormOpenRef.current && draggedDown < -200) {
+      if (isFormOpenRef.current && draggedDown < -100) {
         currentRotation.current = 0;
         if (formRef.current) {
           formRef.current.style.transition = "transform 0.4s ease-out";
@@ -492,7 +492,7 @@ export default function Contact() {
       }
 
       // If dragged down enough, treat as drawer handle pull
-      if (!isFormOpenRef.current && draggedDown > 200) {
+      if (!isFormOpenRef.current && draggedDown > 100) {
         currentRotation.current = 0;
         // Animate form to fully open, then hand off to state
         if (formRef.current) {
@@ -625,77 +625,77 @@ export default function Contact() {
       ref={contactRef}
     >
       <div
-        className="absolute inset-[0_0_auto_0] w-full ease-out duration-300 bg-(--slip) text-(--charm)"
+        className="absolute inset-[0_0_auto_0] w-full ease-out duration-500 bg-(--slip) text-(--charm)"
         style={{ transform: "translateY(-100%)" }}
         ref={formRef}
       >
-        <div className="absolute bottom-0 right-28 lg:right-76 w-20 lg:w-30 translate-[93%]">
+        <div className="absolute bottom-0 right-28 lg:right-78 w-20 lg:w-24 translate-[93.8%]">
           <svg
-            className="absolute z-1 top-0 -left-28/148 w-80/148"
-            viewBox="0 0 80 57"
+            className="absolute z-1 top-0 -left-26/107 w-80/107"
+            viewBox="0 0 80 50"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M0 0H80V1.16667C66.25 1.16667 66.25 21.5833 80 21.5833V57H0V0Z"
+              d="M0 0H80V1.16667C66.25 1.16667 66.25 21.5833 80 21.5833V50H0V0Z"
               fill="var(--slip)"
             />
           </svg>
           <div
-            className="relative aspect-148/805 origin-[33%_6%] rotate-0"
+            className="relative aspect-107/805 origin-[50%_7%] rotate-0"
             ref={momentumRef}
           >
             <Image
-              className="absolute top-0 left-0 aspect-103/209 w-103/148"
-              src="/images/chain-new.png"
+              className="absolute top-0 left-0 aspect-107/209 w-full"
+              src="/images/chain-final.png"
               alt="Chain"
-              width={103}
+              width={107}
               height={209}
             />
             <div
-              className="absolute top-[22.6%] left-[2.5%] aspect-148/623 w-full origin-[31%_0%] cursor-grab pointer-events-auto"
+              className="absolute top-182/805 left-0 aspect-107/623 w-full origin-[45%_-1%] cursor-grab pointer-events-auto"
               ref={swingingRef}
             >
-              <div className="relative aspect-148/205 w-full">
+              <div className="relative aspect-107/168 w-full">
                 <Image
-                  className="relative z-1 w-full aspect-148/205"
-                  src="/images/lanyard-string.png"
+                  className="relative z-1 w-full aspect-107/168"
+                  src="/images/djfskjdvf.png"
                   alt="Lanyard string"
-                  width={148}
-                  height={205}
+                  width={107}
+                  height={168}
                 />
                 <div
-                  className="absolute top-120/205 right-0 w-104/148 origin-[45%_0%]"
+                  className="absolute top-120/168 left-10/107 w-87/107 origin-[45%_0%]"
                   ref={swingExtra1Ref}
                 >
                   <Image
-                    className="w-full aspect-104/215"
-                    src="/images/con.png"
+                    className="w-full aspect-87/214"
+                    src="/images/con-tag.png"
                     alt="Con badge"
-                    width={104}
-                    height={215}
+                    width={87}
+                    height={214}
                   />
                   <div
-                    className="absolute top-206/215 right-2/104 w-116/104 origin-[55%_0%]"
+                    className="absolute top-208/214 -left-10/107 w-107/87 origin-[45%_-5%]"
                     ref={swingExtra2Ref}
                   >
                     <Image
-                      className="w-full aspect-116/146"
-                      src="/images/ta.png"
+                      className="w-full aspect-107/144"
+                      src="/images/ta-tag.png"
                       alt="Ta tag"
-                      width={115}
-                      height={146}
+                      width={107}
+                      height={144}
                     />
                     <div
-                      className="absolute top-142/146 right-5/116 w-87/116 origin-[45%_-3%]"
+                      className="absolute top-140/144 right-4/107 w-87/107 origin-[40%_-3%]"
                       ref={swingExtra3Ref}
                     >
                       <Image
-                        className="w-full aspect-87/155"
-                        src="/images/ct.png"
+                        className="w-full aspect-87/154"
+                        src="/images/ct-tag.png"
                         alt="Ct badge"
                         width={87}
-                        height={155}
+                        height={154}
                       />
                     </div>
                   </div>

@@ -22,7 +22,7 @@ export default async function Home() {
       </div>
       <div className="flex-1 w-[calc(100%+32px)] lg:w-full -translate-x-4 lg:translate-x-0 flex flex-col gap-3 items-stretch justify-start">
         <p className="paragraph uppercase pl-4 lg:pl-0">Upcoming Events</p>
-        <div className="flex-1 flex gap-6 h-full px-4 overflow-x-scroll">
+        <div className="flex-1 flex gap-6 h-full px-4 lg:px-0 overflow-x-scroll">
           {events.map((event: any, index: number) => (
             <a
               key={event.id}
