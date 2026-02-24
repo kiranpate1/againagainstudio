@@ -37,6 +37,17 @@ export default function Contact() {
   const closeContactRef = useRef<HTMLAnchorElement>(null);
   const [isFormOpen, setIsFormOpen] = useState(pathname === "/contact");
   const isFormOpenRef = useRef(pathname === "/contact");
+  const [previousPagePath, setPreviousPagePath] = useState<string>("/");
+
+  // Track the previous pathname before opening contact
+  useEffect(() => {
+    if (pathname === "/contact") {
+      // Don't update previousPagePath when already on contact
+    } else {
+      // Store current path as the previous path for when contact opens
+      setPreviousPagePath(pathname);
+    }
+  }, [pathname]);
 
   // Sync form state with pathname changes
   useEffect(() => {
@@ -66,7 +77,7 @@ export default function Contact() {
       closeContactRef.current.addEventListener("click", (e) => {
         e.preventDefault();
         setIsFormOpen(false);
-        router.push("/");
+        router.push(previousPagePath);
       });
     }
 
@@ -78,10 +89,10 @@ export default function Contact() {
       if (newFormState) {
         router.push("/contact");
       } else {
-        router.push("/");
+        router.push(previousPagePath);
       }
     };
-  }, [isFormOpen, router]);
+  }, [isFormOpen, router, previousPagePath]);
 
   // form stuff
 

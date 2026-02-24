@@ -42,47 +42,46 @@ export default function Navigation() {
       galleryLetters?.forEach((letter) => {
         letter.style.setProperty("transform", "rotate(0deg)");
       });
+      // } else if (pageSlug === "gallery") {
+      //   galleryLetters[0]?.style.setProperty(
+      //     "transform",
+      //     "translate(20%,0%) rotate(-10deg)",
+      //   );
+      //   galleryLetters[1]?.style.setProperty(
+      //     "transform",
+      //     "translate(12%,-6%) rotate(0deg)",
+      //   );
+      //   galleryLetters[2]?.style.setProperty(
+      //     "transform",
+      //     "translate(4%,0%) rotate(8deg)",
+      //   );
+      //   galleryLetters[3]?.style.setProperty(
+      //     "transform",
+      //     "translate(-4%,4%) rotate(0deg)",
+      //   );
+      //   galleryLetters[4]?.style.setProperty(
+      //     "transform",
+      //     "translate(-12%,-8%) rotate(6deg)",
+      //   );
+      //   galleryLetters[5]?.style.setProperty(
+      //     "transform",
+      //     "translate(-20%,0%) rotate(-20deg)",
+      //   );
+      //   galleryLetters[6]?.style.setProperty(
+      //     "transform",
+      //     "translate(-28%,8%) rotate(10deg)",
+      //   );
+      //   infoLetters?.forEach((letter) => {
+      //     letter.style.setProperty("transform", "rotate(0deg)");
+      //   });
+    } else {
+      infoLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
+      galleryLetters?.forEach((letter) => {
+        letter.style.setProperty("transform", "rotate(0deg)");
+      });
     }
-    // } else if (pageSlug === "gallery") {
-    //   galleryLetters[0]?.style.setProperty(
-    //     "transform",
-    //     "translate(20%,0%) rotate(-10deg)",
-    //   );
-    //   galleryLetters[1]?.style.setProperty(
-    //     "transform",
-    //     "translate(12%,-6%) rotate(0deg)",
-    //   );
-    //   galleryLetters[2]?.style.setProperty(
-    //     "transform",
-    //     "translate(4%,0%) rotate(8deg)",
-    //   );
-    //   galleryLetters[3]?.style.setProperty(
-    //     "transform",
-    //     "translate(-4%,4%) rotate(0deg)",
-    //   );
-    //   galleryLetters[4]?.style.setProperty(
-    //     "transform",
-    //     "translate(-12%,-8%) rotate(6deg)",
-    //   );
-    //   galleryLetters[5]?.style.setProperty(
-    //     "transform",
-    //     "translate(-20%,0%) rotate(-20deg)",
-    //   );
-    //   galleryLetters[6]?.style.setProperty(
-    //     "transform",
-    //     "translate(-28%,8%) rotate(10deg)",
-    //   );
-    //   infoLetters?.forEach((letter) => {
-    //     letter.style.setProperty("transform", "rotate(0deg)");
-    //   });
-    // } else {
-    //   infoLetters?.forEach((letter) => {
-    //     letter.style.setProperty("transform", "rotate(0deg)");
-    //   });
-    //   galleryLetters?.forEach((letter) => {
-    //     letter.style.setProperty("transform", "rotate(0deg)");
-    //   });
-    // }
   }, [pathname]);
 
   //test

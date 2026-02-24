@@ -1,13 +1,38 @@
+"use client";
+
 import { getNotionEvents } from "@/app/actions/getEvents";
 import { shapes } from "@/app/shapes";
 import { formatEventDate } from "@/app/utils/dateFormatter";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function Home() {
-  const events = await getNotionEvents();
+export default function Home() {
+  const pathname = usePathname();
+  const [previousPathname, setPreviousPathname] = useState<string>("");
+
+  useEffect(() => {
+    // Cleanup function runs before the next effect or on unmount
+    // This captures the current pathname as the "previous" one
+    return () => {
+      setPreviousPathname(pathname);
+    };
+  }, [pathname]);
+
+  const isHome =
+    pathname === "/" || (previousPathname === "/" && pathname !== "/info");
+
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    getNotionEvents().then(setEvents);
+  }, []);
 
   return (
-    <div className="relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23">
+    <div
+      className="relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23"
+      style={{ display: isHome ? "flex" : "none" }}
+    >
       <div className="md:w-[80%] flex flex-col items-start gap-2">
         <h1 className="heading-large">
           Again Again is a creative studio in Toronto that curates social events
@@ -41,6 +66,7 @@ export default async function Home() {
                       className="object-cover contrast-100 group-hover:contrast-120 brightness-100 group-hover:brightness-90"
                     />
                   </div>,
+                  `home-${event.id}`,
                 )}
               </div>
               <div className="absolute z-2 inset-[auto_0_0_0] px-6 py-6 flex flex-col items-start justify-end gap-3">
