@@ -37,17 +37,13 @@ export default function Contact() {
   const closeContactRef = useRef<HTMLAnchorElement>(null);
   const [isFormOpen, setIsFormOpen] = useState(pathname === "/contact");
   const isFormOpenRef = useRef(pathname === "/contact");
-  const [previousPagePath, setPreviousPagePath] = useState<string>("/");
+  const previousPagePathRef = useRef<string>(
+    pathname === "/contact" ? "/" : pathname,
+  );
 
-  // Track the previous pathname before opening contact
-  useEffect(() => {
-    if (pathname === "/contact") {
-      // Don't update previousPagePath when already on contact
-    } else {
-      // Store current path as the previous path for when contact opens
-      setPreviousPagePath(pathname);
-    }
-  }, [pathname]);
+  if (pathname !== "/contact" && pathname !== previousPagePathRef.current) {
+    previousPagePathRef.current = pathname;
+  }
 
   // Sync form state with pathname changes
   useEffect(() => {
@@ -77,7 +73,7 @@ export default function Contact() {
       closeContactRef.current.addEventListener("click", (e) => {
         e.preventDefault();
         setIsFormOpen(false);
-        router.push(previousPagePath);
+        router.push(previousPagePathRef.current);
       });
     }
 
@@ -89,10 +85,10 @@ export default function Contact() {
       if (newFormState) {
         router.push("/contact");
       } else {
-        router.push(previousPagePath);
+        router.push(previousPagePathRef.current);
       }
     };
-  }, [isFormOpen, router, previousPagePath]);
+  }, [isFormOpen, router]);
 
   // form stuff
 
@@ -671,7 +667,7 @@ export default function Contact() {
               <div className="relative aspect-107/168 w-full">
                 <Image
                   className="relative z-1 w-full aspect-107/168"
-                  src="/images/djfskjdvf.png"
+                  src="/images/lanyard-rope.png"
                   alt="Lanyard string"
                   width={107}
                   height={168}

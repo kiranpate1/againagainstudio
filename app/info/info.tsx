@@ -1,24 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { shapes } from "../shapes";
 
 export default function Info() {
   const pathname = usePathname();
-  const [previousPathname, setPreviousPathname] = useState<string>("");
+  const basePageRef = useRef<string>(pathname === "/contact" ? "/" : pathname);
 
-  useEffect(() => {
-    // Cleanup function runs before the next effect or on unmount
-    // This captures the current pathname as the "previous" one
-    return () => {
-      setPreviousPathname(pathname);
-    };
-  }, [pathname]);
+  if (pathname !== "/contact" && pathname !== basePageRef.current) {
+    basePageRef.current = pathname;
+  }
 
   const isInfo =
-    pathname === "/info" || (previousPathname === "/info" && pathname !== "/");
+    pathname === "/info" ||
+    (pathname === "/contact" && basePageRef.current === "/info");
 
   return (
     <div
@@ -44,12 +42,12 @@ export default function Info() {
             The studio isn’t built to maximize profit. It’s built to share with
             the community.
           </h1>
-          <a
+          <Link
             href="/contact"
             className="paragraph text-(--charm) cursor hover:opacity-70"
           >
             Get in contact about hosting
-          </a>
+          </Link>
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Private Events</p>
@@ -62,12 +60,12 @@ export default function Info() {
             paint nights, and drawing classes, and is flexible enough to support
             other creative workshops you have in mind.
           </h1>
-          <a
+          <Link
             href="/contact"
             className="paragraph text-(--charm) cursor hover:opacity-70"
           >
             Learn more about the space
-          </a>
+          </Link>
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">The Space</p>

@@ -5,22 +5,19 @@ import { shapes } from "@/app/shapes";
 import { formatEventDate } from "@/app/utils/dateFormatter";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const pathname = usePathname();
-  const [previousPathname, setPreviousPathname] = useState<string>("");
+  const basePageRef = useRef<string>(pathname === "/contact" ? "/" : pathname);
 
-  useEffect(() => {
-    // Cleanup function runs before the next effect or on unmount
-    // This captures the current pathname as the "previous" one
-    return () => {
-      setPreviousPathname(pathname);
-    };
-  }, [pathname]);
+  if (pathname !== "/contact" && pathname !== basePageRef.current) {
+    basePageRef.current = pathname;
+  }
 
   const isHome =
-    pathname === "/" || (previousPathname === "/" && pathname !== "/info");
+    pathname === "/" ||
+    (pathname === "/contact" && basePageRef.current === "/");
 
   const [events, setEvents] = useState<any[]>([]);
 
