@@ -837,7 +837,7 @@ export default function Contact() {
             </form>
           </div>
         </div>
-        <div className="w-full flex h-8 lg:h-15">
+        <div className="w-full flex h-10 lg:h-15">
           <div className="w-[calc(100vw-124px)] lg:w-[calc(100vw-318px)] h-full bg-(--slip)" />
           <div className="w-16 lg:w-24 h-full" />
           <div className="flex-1 h-full bg-(--slip)" />
