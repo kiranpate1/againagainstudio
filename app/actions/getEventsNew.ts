@@ -1,0 +1,43 @@
+"use server";
+
+import type { Event } from "./getEvents";
+
+type LumaEventData = {
+  api_id: string;
+  event: {
+    api_id: string;
+    name: string;
+    start_at: string;
+    cover_url: string;
+    url: string;
+    description?: string;
+  };
+};
+
+export async function getEvents(): Promise<Event[]> {
+  const res = await fetch("https://api.lu.ma/public/v1/calendar/list-events", {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "x-luma-api-key": process.env.LUMA_API_KEY || "",
+    },
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  const data = (await res.json()) as { entries: LumaEventData[] };
+
+  return data.entries.map((entry) => ({
+    id: entry.api_id,
+    eventName: entry.event.name,
+    date: entry.event.start_at,
+    description: entry.event.description || "",
+    link: entry.event.url,
+    image: entry.event.cover_url,
+    hasHost: false, // Defaulting as Luma may not provide host info directly here
+    hostName: "",
+  }));
+}

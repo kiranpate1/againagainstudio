@@ -5,7 +5,8 @@ import { shapes } from "@/app/shapes";
 import { formatEventDate } from "@/app/utils/dateFormatter";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
+import { getEvents } from "../actions/getEventsNew";
 
 export default function Home() {
   const pathname = usePathname();
@@ -21,8 +22,26 @@ export default function Home() {
 
   const [events, setEvents] = useState<any[]>([]);
 
+  // useEffect(() => {
+  //   getNotionEvents().then(setEvents);
+  // }, []);
+
   useEffect(() => {
-    getNotionEvents().then(setEvents);
+    // console.log("Fetching Luma events...");
+    getEvents()
+      .then((lumaEvents) => {
+        // console.log("Luma events fetched:", lumaEvents);
+
+        const now = new Date();
+        const upcomingEvents = lumaEvents.filter(
+          (event) => event.date && new Date(event.date) > now,
+        );
+
+        setEvents(upcomingEvents);
+      })
+      .catch((error) => {
+        console.error("Error fetching Luma events:", error);
+      });
   }, []);
 
   return (
@@ -42,9 +61,22 @@ export default function Home() {
           Learn more about the space
         </a>
       </div>
-      <div className="flex-1 w-[calc(100%+32px)] lg:w-full -translate-x-4 lg:translate-x-0 flex flex-col gap-3 items-stretch justify-start">
-        <p className="paragraph uppercase pl-4 lg:pl-0">Upcoming Events</p>
-        <div className="flex-1 flex gap-6 h-full px-4 lg:px-0 overflow-x-scroll">
+      <div className="flex-1 w-full flex flex-col gap-3 items-stretch justify-start">
+        <div className="w-full flex items-center justify-between">
+          <p className="paragraph uppercase">Upcoming Events</p>
+          <a
+            href="https://luma.com/againagain"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="paragraph text-(--charm) cursor hover:opacity-70"
+          >
+            View all
+            <span className="paragraph lowercase inline-block translate-y-px -rotate-45">
+              →
+            </span>
+          </a>
+        </div>
+        <div className="flex-1 flex gap-6 h-full w-[calc(100%+32px)] lg:w-[calc(100%+80px)] -mx-4 lg:-mx-10 px-4 lg:px-10 overflow-x-scroll">
           {events.map((event: any, index: number) => (
             <a
               key={event.id}
@@ -54,38 +86,30 @@ export default function Home() {
               className="group relative h-full aspect-square"
             >
               <div className="relative h-full">
-                {shapes[index].svg(
+                {shapes[index % shapes.length].svg(
                   <div className="relative w-full h-full">
                     <Image
                       src={event.image || "/placeholder.png"}
                       alt={event.eventName}
                       fill
-                      className="object-cover contrast-100 group-hover:contrast-120 brightness-100 group-hover:brightness-90"
+                      className="object-cover contrast-100 group-hover:contrast-160 brightness-100 group-hover:brightness-80"
                     />
                   </div>,
                   `home-${event.id}`,
                 )}
               </div>
-              <div className="absolute z-2 inset-[auto_0_0_0] px-6 py-6 flex flex-col items-start justify-end gap-3">
+              {/* <div className="absolute z-2 inset-[auto_0_0_0] px-6 py-6 flex flex-col items-start justify-end gap-3">
                 <p className="caption">{formatEventDate(event.date)}</p>
                 <div className="flex flex-col gap-1">
                   <h2 className="paragraph text-balance">{event.eventName}</h2>
-                  <p className="hidden lg:block caption text-pretty text-[rgba(255,255,255,0.7)]">
+                  <p className="hidden lg:block caption text-pretty text-[rgba(255,255,255,0.7)] max-h-9 overflow-hidden text-ellipsis">
                     {event.description}
                   </p>
                 </div>
-              </div>
+              </div> */}
             </a>
           ))}
         </div>
-        <a
-          href="https://luma.com/againagain"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="paragraph text-(--charm) cursor hover:opacity-70 pl-4 lg:pl-0"
-        >
-          View all events
-        </a>
       </div>
     </div>
   );
