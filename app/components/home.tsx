@@ -1,12 +1,10 @@
 "use client";
 
-import { getNotionEvents } from "@/app/actions/getEvents";
 import { shapes } from "@/app/shapes";
-import { formatEventDate } from "@/app/utils/dateFormatter";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, use } from "react";
-import { getEvents } from "../actions/getEventsNew";
+import { getEvents } from "../actions/getEvents";
 
 export default function Home() {
   const pathname = usePathname();

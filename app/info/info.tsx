@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { shapes } from "../shapes";
 
 export default function Info() {
@@ -64,7 +64,7 @@ export default function Info() {
             href="/contact"
             className="paragraph text-(--charm) cursor hover:opacity-70"
           >
-            Learn more about the space
+            Inquire about a private event
           </Link>
         </div>
         <div className="w-full flex flex-col items-start gap-2">
