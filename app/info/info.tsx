@@ -3,12 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { shapes } from "../shapes";
 
 export default function Info() {
   const pathname = usePathname();
   const basePageRef = useRef<string>(pathname === "/contact" ? "/" : pathname);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   if (pathname !== "/contact" && pathname !== basePageRef.current) {
     basePageRef.current = pathname;
@@ -18,9 +19,26 @@ export default function Info() {
     pathname === "/info" ||
     (pathname === "/contact" && basePageRef.current === "/info");
 
+  useEffect(() => {
+    if (isInfo && containerRef.current) {
+      const elements = containerRef.current.querySelectorAll(
+        "h1:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
+      );
+      elements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.setAttribute("data-animated", "true");
+        htmlEl.style.animation = "none";
+        // trigger reflow
+        void htmlEl.offsetHeight;
+        htmlEl.style.animation = `flashIn 0.3s forwards ${index * 50}ms`;
+      });
+    }
+  }, [isInfo]);
+
   return (
     <div
-      className="relative inset-0 w-screen h-screen flex items-start justify-center px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23 overflow-scroll"
+      ref={containerRef}
+      className="animate-ready relative inset-0 w-screen h-screen flex items-start justify-center px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23 overflow-scroll"
       style={{ display: isInfo ? "flex" : "none" }}
     >
       <div className="w-full max-w-[660px] flex flex-col items-start gap-16">

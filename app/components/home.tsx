@@ -5,10 +5,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, use } from "react";
 import { getEvents } from "../actions/getEvents";
+import { setRequestMeta } from "next/dist/server/request-meta";
 
 export default function Home() {
   const pathname = usePathname();
   const basePageRef = useRef<string>(pathname === "/contact" ? "/" : pathname);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   if (pathname !== "/contact" && pathname !== basePageRef.current) {
     basePageRef.current = pathname;
@@ -67,9 +69,26 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    if (isHome && containerRef.current) {
+      const elements = containerRef.current.querySelectorAll(
+        "h1:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
+      );
+      elements.forEach((el, index) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.setAttribute("data-animated", "true");
+        htmlEl.style.animation = "none";
+        // trigger reflow
+        void htmlEl.offsetHeight;
+        htmlEl.style.animation = `flashIn 0.3s forwards ${index * 50 + 50}ms`;
+      });
+    }
+  }, [isHome, events]);
+
   return (
     <div
-      className="relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23"
+      ref={containerRef}
+      className="animate-ready relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23"
       style={{ display: isHome ? "flex" : "none" }}
     >
       <div className="md:w-[80%] max-w-[1200px] flex flex-col items-start gap-2.5">
