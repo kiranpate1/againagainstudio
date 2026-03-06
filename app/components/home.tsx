@@ -125,7 +125,7 @@ export default function Home() {
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative h-full aspect-square"
+              className="group relative h-full aspect-square rotate-0 hover:rotate-3"
             >
               <div className="relative h-full">
                 {shapes[index % shapes.length].svg(
