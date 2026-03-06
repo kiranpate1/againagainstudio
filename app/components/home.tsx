@@ -69,10 +69,14 @@ export default function Home() {
       });
   }, []);
 
+  const mainTitle =
+    "Again Again is a creative studio in Toronto that curates social events centred on making, curiosity, and shared experience.";
+  const titleSplit = mainTitle.split(" ");
+
   useEffect(() => {
     if (isHome && containerRef.current) {
       const elements = containerRef.current.querySelectorAll(
-        "h1:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
+        "h1 span:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
       );
       elements.forEach((el, index) => {
         const htmlEl = el as HTMLElement;
@@ -80,7 +84,7 @@ export default function Home() {
         htmlEl.style.animation = "none";
         // trigger reflow
         void htmlEl.offsetHeight;
-        htmlEl.style.animation = `flashIn 0.3s forwards ${index * 50 + 50}ms`;
+        htmlEl.style.animation = `flashIn 50ms forwards ${index * 50 + 50}ms`;
       });
     }
   }, [isHome, events]);
@@ -93,8 +97,12 @@ export default function Home() {
     >
       <div className="md:w-[80%] max-w-[1200px] flex flex-col items-start gap-2.5">
         <h1 className="heading-large">
-          Again Again is a creative studio in Toronto that curates social events
-          centred on making, curiosity, and shared experience.
+          {titleSplit.map((word, index) => (
+            <span key={index} className="inline-block">
+              {word}
+              {index < titleSplit.length - 1 && <>&nbsp;</>}
+            </span>
+          ))}
         </h1>
         <a
           href="/info"
