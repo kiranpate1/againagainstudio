@@ -28,12 +28,37 @@ export default function Home() {
     // console.log("Fetching Luma events...");
     getEvents()
       .then((lumaEvents) => {
-        // console.log("Luma events fetched:", lumaEvents);
+        console.log(
+          "RAW Luma events direct from API (Browser Console):",
+          lumaEvents,
+        );
+
+        const apiResponse = lumaEvents as any;
+        const entries = apiResponse.entries ? apiResponse.entries : lumaEvents;
 
         const now = new Date();
-        const upcomingEvents = lumaEvents.filter(
-          (event) => event.date && new Date(event.date) > now,
-        );
+        const upcomingEvents = entries
+          .map((entry: any) => {
+            // Check if we are dealing with formatted or unformatted data to keep page from crashing
+            if (entry.event) {
+              return {
+                id: entry.api_id,
+                eventName: entry.event.name,
+                date: entry.event.start_at,
+                description: entry.event.description || "",
+                link: entry.event.url,
+                image: entry.event.cover_url,
+                visibility: entry.event.visibility,
+              };
+            }
+            return entry;
+          })
+          .filter(
+            (event: any) =>
+              event.visibility !== "private" &&
+              event.date &&
+              new Date(event.date) > now,
+          );
 
         setEvents(upcomingEvents);
       })
@@ -47,7 +72,7 @@ export default function Home() {
       className="relative inset-0 w-screen h-dvh lg:h-screen min-h-[700px] lg:min-h-[800px] flex flex-col gap-10 md:gap-14 items-start justify-start px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23"
       style={{ display: isHome ? "flex" : "none" }}
     >
-      <div className="md:w-[80%] flex flex-col items-start gap-2">
+      <div className="md:w-[80%] max-w-[1200px] flex flex-col items-start gap-2.5">
         <h1 className="heading-large">
           Again Again is a creative studio in Toronto that curates social events
           centred on making, curiosity, and shared experience.

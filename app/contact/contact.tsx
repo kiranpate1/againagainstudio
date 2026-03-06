@@ -763,7 +763,7 @@ export default function Contact() {
                   />
                 </svg>
               </a>
-              <p className="heading-small text-pretty">
+              <p className="heading-small text-pretty max-w-[calc(100%-24px)]">
                 Host an event or inquire for private classes
               </p>
               <p className="paragraph text-pretty opacity-50">

@@ -37,16 +37,7 @@ export async function getEvents(): Promise<Event[]> {
     throw new Error("Failed to fetch data");
   }
 
-  const data = (await res.json()) as { entries: LumaEventData[] };
+  const data = await res.json();
 
-  return data.entries.map((entry) => ({
-    id: entry.api_id,
-    eventName: entry.event.name,
-    date: entry.event.start_at,
-    description: entry.event.description || "",
-    link: entry.event.url,
-    image: entry.event.cover_url,
-    hasHost: false, // Defaulting as Luma may not provide host info directly here
-    hostName: "",
-  }));
+  return data as any;
 }

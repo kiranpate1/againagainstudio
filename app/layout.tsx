@@ -15,16 +15,6 @@ const syne = Syne({
   subsets: ["latin"],
 });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Again Again Studio",
   description:
@@ -72,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-(--kiln-fire) text-(--bisqueware) selection:bg-(--bisqueware) selection:text-(--kiln-fire)`}
+        className={`${syne.variable} antialiased bg-(--kiln-fire) text-(--bisqueware) selection:bg-(--bisqueware) selection:text-(--kiln-fire)`}
       >
         <main className="fixed w-screen h-screen overflow-hidden">
           <ProjectContentProvider>
