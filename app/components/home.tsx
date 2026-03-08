@@ -208,7 +208,7 @@ export default function Home() {
           </h1>
           <h1
             ref={introTitleRef}
-            className="absolute inset-0 heading-large"
+            className="absolute inset-0 heading-large pointer-events-none"
           ></h1>
         </div>
         <a
