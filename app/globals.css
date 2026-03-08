@@ -158,8 +158,6 @@ select:-webkit-autofill:focus {
   }
 }
 
-.animate-ready h1 span,
-.animate-ready p,
 .animate-ready a,
 .animate-ready img {
   opacity: 0;

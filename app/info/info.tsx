@@ -19,32 +19,15 @@ export default function Info() {
     pathname === "/info" ||
     (pathname === "/contact" && basePageRef.current === "/info");
 
-  // useEffect(() => {
-  //   if (isInfo && containerRef.current) {
-  //     const elements = containerRef.current.querySelectorAll(
-  //       "h1:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
-  //     );
-  //     elements.forEach((el, index) => {
-  //       const htmlEl = el as HTMLElement;
-  //       htmlEl.setAttribute("data-animated", "true");
-  //       htmlEl.style.animation = "none";
-  //       // trigger reflow
-  //       void htmlEl.offsetHeight;
-  //       htmlEl.style.animation = `flashIn 50ms forwards ${index * 50}ms`;
-  //     });
-  //   }
-  // }, [isInfo]);
-
   return (
     <div
-      ref={containerRef}
       className="relative inset-0 w-screen h-screen flex items-start justify-center px-4 pt-18 pb-12 lg:px-10 lg:pt-23 lg:pb-23 overflow-scroll"
       style={{ display: isInfo ? "flex" : "none" }}
     >
       <div className="w-full max-w-[660px] flex flex-col items-start gap-16">
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Programming</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             Again Again offers hands-on creative programming built around shared
             experience. We host beginner-friendly workshops, shows, and social
             craft nights led by local talent. Our focus is on access, curiosity,
@@ -59,7 +42,7 @@ export default function Info() {
             <br />
             The studio isn’t built to maximize profit. It’s built to share with
             the community.
-          </h1>
+          </h2>
           <Link
             href="/contact"
             className="paragraph text-(--charm) cursor hover:opacity-70"
@@ -69,7 +52,7 @@ export default function Info() {
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Private Events</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             We also host private events and workshops. The space accommodates up
             to 40 guests standing or 25 seated at tables.
             <br />
@@ -77,7 +60,7 @@ export default function Info() {
             The studio is equipped for hand building ceramics, glazing sessions,
             paint nights, and drawing classes, and is flexible enough to support
             other creative workshops you have in mind.
-          </h1>
+          </h2>
           <Link
             href="/contact"
             className="paragraph text-(--charm) cursor hover:opacity-70"
@@ -87,7 +70,7 @@ export default function Info() {
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">The Space</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             Our space in Downtown Toronto opened in January 2026. It sits at the
             heart of Downtown Toronto, between King Street, Adelaide, and John
             St.
@@ -95,14 +78,14 @@ export default function Info() {
             <br />
             The location aims to be accessible as possible to those who want to
             explore their creative side.
-          </h1>
+          </h2>
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Tatami Area</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             Tatami area can be used as a stage for performing, or as a lounge
             area for guests
-          </h1>
+          </h2>
           <div className="flex items-stretch gap-2 w-[calc(100%+32px)] md:w-full h-[clamp(250px,22vw,320px)] overflow-scroll px-4 md:px-0 -mx-4 md:mx-0 mt-4">
             <div className="relative h-full aspect-square">
               {shapes[3].svg(
@@ -134,14 +117,14 @@ export default function Info() {
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Main Tables</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             There are 4 square tables, put together to make two large
             rectangular tables. Each table can be separated and reconfigured.
             <br />
             <br />
             There is about 8 chairs per table, with an extra 8 stools available
             to be added.
-          </h1>
+          </h2>
           <div className="flex items-stretch gap-2 w-[calc(100%+32px)] md:w-full h-[clamp(250px,22vw,320px)] overflow-scroll px-4 md:px-0 -mx-4 md:mx-0 mt-4">
             <div className="relative h-full aspect-square">
               {shapes[2].svg(
@@ -173,11 +156,11 @@ export default function Info() {
         </div>
         <div className="w-full flex flex-col items-start gap-2">
           <p className="paragraph uppercase">Pottery Area</p>
-          <h1 className="heading-small text-pretty">
+          <h2 className="heading-small text-pretty">
             To the left of the tatami mat area, there is a small area for
             pottery. There is one large rectangular table, able to fit 8 people
             comfortable. Kiln can be moved to the side to make more space.
-          </h1>
+          </h2>
           <div className="flex items-stretch gap-2 w-[calc(100%+32px)] md:w-full h-[clamp(250px,22vw,320px)] overflow-scroll px-4 md:px-0 -mx-4 md:mx-0 mt-4">
             <div className="relative h-full aspect-square">
               {shapes[0].svg(

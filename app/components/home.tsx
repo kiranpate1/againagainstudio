@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, use } from "react";
 import { getEvents } from "../actions/getEvents";
-import { setRequestMeta } from "next/dist/server/request-meta";
 
 export default function Home() {
   const pathname = usePathname();
@@ -69,14 +68,120 @@ export default function Home() {
       });
   }, []);
 
-  const mainTitle =
+  const introTitleRef = useRef<HTMLHeadingElement>(null);
+  const actualTitleRef = useRef<HTMLHeadingElement>(null);
+  const originalTitle =
     "Again Again is a creative studio in Toronto that curates social events centred on making, curiosity, and shared experience.";
-  const titleSplit = mainTitle.split(" ");
+
+  // Title reveal animation - starts short and builds to full length
+  useEffect(() => {
+    if (!isHome || !introTitleRef.current || !actualTitleRef.current) return;
+
+    const titleElement = introTitleRef.current;
+    const actualTitle = actualTitleRef.current;
+    const specialChars = "!@#$%^&*+-=?<>";
+
+    const chars = originalTitle.split("");
+    const totalLength = chars.length;
+    const revealedIndices = new Set<number>();
+
+    // Start with about 40% of the final length
+    let currentDisplayLength = Math.floor(totalLength * 0.4);
+    let frame = 0;
+    let rafId: number;
+
+    const getRandomChar = () =>
+      specialChars[Math.floor(Math.random() * specialChars.length)];
+
+    const generateText = () => {
+      let result = "";
+      let charCount = 0;
+
+      for (
+        let i = 0;
+        i < totalLength && charCount < currentDisplayLength;
+        i++
+      ) {
+        if (chars[i] === " ") {
+          result += " ";
+        } else {
+          if (revealedIndices.has(i)) {
+            result += chars[i];
+          } else {
+            result += getRandomChar();
+          }
+          charCount++;
+        }
+      }
+      return result;
+    };
+
+    const targetIndices = chars
+      .map((char, i) => (char !== " " ? i : -1))
+      .filter((i) => i !== -1);
+
+    let remaining = [...targetIndices];
+
+    const animate = () => {
+      frame++;
+
+      // Flash phase: frames 1-2
+      if (frame <= 2) {
+        titleElement.textContent = generateText();
+        rafId = requestAnimationFrame(animate);
+      }
+      // Reveal phase: every 3rd frame reveal some characters and grow length
+      else if (frame % 3 === 0 && remaining.length > 0) {
+        const count = Math.min(5, remaining.length);
+
+        for (let i = 0; i < count; i++) {
+          const idx = Math.floor(Math.random() * remaining.length);
+          const charIdx = remaining[idx];
+          revealedIndices.add(charIdx);
+          remaining.splice(idx, 1);
+        }
+
+        // Gradually increase display length
+        const progress = 1 - remaining.length / targetIndices.length;
+        currentDisplayLength = Math.floor(totalLength * (0.4 + progress * 0.6));
+
+        titleElement.textContent = generateText();
+
+        if (remaining.length === 0) {
+          titleElement.textContent = originalTitle;
+          // Animation complete - swap visibility
+          titleElement.classList.add("opacity-0");
+          actualTitle.classList.remove("opacity-0");
+        } else {
+          rafId = requestAnimationFrame(animate);
+        }
+      } else if (remaining.length > 0) {
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
+    // Start animation after a tiny delay to let page settle
+    const startTimeout = setTimeout(() => {
+      rafId = requestAnimationFrame(animate);
+    }, 100);
+
+    return () => {
+      clearTimeout(startTimeout);
+      cancelAnimationFrame(rafId);
+      if (titleElement) {
+        titleElement.textContent = originalTitle;
+        titleElement.classList.remove("opacity-0");
+      }
+      if (actualTitle) {
+        actualTitle.classList.add("opacity-0");
+      }
+    };
+  }, [isHome]);
 
   useEffect(() => {
     if (isHome && containerRef.current) {
       const elements = containerRef.current.querySelectorAll(
-        "h1 span:not([data-animated]), p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
+        "p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
       );
       elements.forEach((el, index) => {
         const htmlEl = el as HTMLElement;
@@ -96,14 +201,16 @@ export default function Home() {
       style={{ display: isHome ? "flex" : "none" }}
     >
       <div className="md:w-[80%] max-w-[1200px] flex flex-col items-start gap-2.5">
-        <h1 className="heading-large">
-          {titleSplit.map((word, index) => (
-            <span key={index} className="inline-block">
-              {word}
-              {index < titleSplit.length - 1 && <>&nbsp;</>}
-            </span>
-          ))}
-        </h1>
+        <div className="relative">
+          <h1 className="relative heading-large opacity-0" ref={actualTitleRef}>
+            Again Again is a creative studio in Toronto that curates social
+            events centred on making, curiosity, and shared experience.
+          </h1>
+          <h1
+            ref={introTitleRef}
+            className="absolute inset-0 heading-large"
+          ></h1>
+        </div>
         <a
           href="/info"
           className="paragraph text-(--charm) cursor hover:opacity-70"
