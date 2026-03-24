@@ -13,7 +13,10 @@ function makeSvg(
 ): SVGSVGElement {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("class", "w-[0.9ch] -translate-x-1/2 -translate-y-1/2");
+  svg.setAttribute(
+    "class",
+    "w-[0.9ch] max-h-full -translate-x-1/2 -translate-y-1/2",
+  );
   svg.setAttribute("viewBox", viewBox);
   svg.setAttribute("fill", "none");
   const path = document.createElementNS(ns, "path");
@@ -27,7 +30,6 @@ export const loadInShapes: SvgElement[] = [
   {
     id: "shape1",
     name: "Shape 1",
-
     svg: () =>
       makeSvg(
         "230",
