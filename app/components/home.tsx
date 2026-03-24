@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, use } from "react";
 import { getEvents } from "../actions/getEvents";
+import { loadInShapes } from "./loadInShapes";
 
 export default function Home() {
   const pathname = usePathname();
@@ -79,103 +80,42 @@ export default function Home() {
 
     const titleElement = introTitleRef.current;
     const actualTitle = actualTitleRef.current;
-    const specialChars = "!@#$%^&*+-=?<>";
 
-    const chars = originalTitle.split("");
-    const totalLength = chars.length;
-    const revealedIndices = new Set<number>();
+    originalTitle.split(" ").forEach((word, wordIndex) => {
+      const newWord = document.createElement("div");
+      newWord.style.display = "inline-block";
+      newWord.style.position = "relative";
+      word.split("").forEach((char, charIndex) => {
+        const newChar = document.createElement("div");
+        newChar.style.display = "inline-block";
+        newChar.style.position = "relative";
+        const newLetter = document.createElement("div");
+        newLetter.textContent = char;
+        newChar.appendChild(newLetter);
 
-    // Start with about 40% of the final length
-    let currentDisplayLength = Math.floor(totalLength * 0.4);
-    let frame = 0;
-    let rafId: number;
+        const newShape =
+          loadInShapes[(wordIndex + charIndex) % loadInShapes.length].svg();
+        newShape.style.position = "absolute";
+        newShape.style.top = "50%";
+        newShape.style.left = "50%";
+        newShape.style.transform = "translate(-50%, -50%)";
+        newChar.appendChild(newShape);
+        newWord.appendChild(newChar);
 
-    const getRandomChar = () =>
-      specialChars[Math.floor(Math.random() * specialChars.length)];
+        const charIndexInTitle =
+          originalTitle
+            .split(" ")
+            .slice(0, wordIndex)
+            .reduce((acc, w) => acc + w.length + 1, 0) + charIndex;
+        const delay = charIndexInTitle * 15; // per character delay
+        newLetter.style.animation = `letterIn 0.5s both ${delay}ms`;
+        newShape.style.animation = `shapeIn 0.5s both ${delay}ms`;
+      });
+      newWord.appendChild(document.createTextNode("\u00A0")); // End with a space for width
+      titleElement.appendChild(newWord);
+    });
 
-    const generateText = () => {
-      let result = "";
-      let charCount = 0;
-
-      for (
-        let i = 0;
-        i < totalLength && charCount < currentDisplayLength;
-        i++
-      ) {
-        if (chars[i] === " ") {
-          result += " ";
-        } else {
-          if (revealedIndices.has(i)) {
-            result += chars[i];
-          } else {
-            result += getRandomChar();
-          }
-          charCount++;
-        }
-      }
-      return result;
-    };
-
-    const targetIndices = chars
-      .map((char, i) => (char !== " " ? i : -1))
-      .filter((i) => i !== -1);
-
-    let remaining = [...targetIndices];
-
-    const animate = () => {
-      frame++;
-
-      // Flash phase: frames 1-2
-      if (frame <= 2) {
-        titleElement.textContent = generateText();
-        rafId = requestAnimationFrame(animate);
-      }
-      // Reveal phase: every 3rd frame reveal some characters and grow length
-      else if (frame % 3 === 0 && remaining.length > 0) {
-        const count = Math.min(5, remaining.length);
-
-        for (let i = 0; i < count; i++) {
-          const idx = Math.floor(Math.random() * remaining.length);
-          const charIdx = remaining[idx];
-          revealedIndices.add(charIdx);
-          remaining.splice(idx, 1);
-        }
-
-        // Gradually increase display length
-        const progress = 1 - remaining.length / targetIndices.length;
-        currentDisplayLength = Math.floor(totalLength * (0.4 + progress * 0.6));
-
-        titleElement.textContent = generateText();
-
-        if (remaining.length === 0) {
-          titleElement.textContent = originalTitle;
-          // Animation complete - swap visibility
-          titleElement.classList.add("opacity-0");
-          actualTitle.classList.remove("opacity-0");
-        } else {
-          rafId = requestAnimationFrame(animate);
-        }
-      } else if (remaining.length > 0) {
-        rafId = requestAnimationFrame(animate);
-      }
-    };
-
-    // Start animation after a tiny delay to let page settle
-    const startTimeout = setTimeout(() => {
-      rafId = requestAnimationFrame(animate);
-    }, 100);
-
-    return () => {
-      clearTimeout(startTimeout);
-      cancelAnimationFrame(rafId);
-      if (titleElement) {
-        titleElement.textContent = originalTitle;
-        titleElement.classList.remove("opacity-0");
-      }
-      if (actualTitle) {
-        actualTitle.classList.add("opacity-0");
-      }
-    };
+    actualTitle.style.opacity = "0";
   }, [isHome]);
 
   useEffect(() => {
