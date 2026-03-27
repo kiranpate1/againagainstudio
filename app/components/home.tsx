@@ -93,12 +93,26 @@ export default function Home() {
         newLetter.textContent = char;
         newChar.appendChild(newLetter);
 
+        const randomColours = [
+          "var(--tile)",
+          "var(--charm)",
+          "var(--glaze)",
+          "var(--copper)",
+          "var(--purple)",
+          "var(--blue-vibrant)",
+        ];
+        const randomColour =
+          randomColours[Math.floor(Math.random() * randomColours.length)];
+
         const newShape =
-          loadInShapes[(wordIndex + charIndex) % loadInShapes.length].svg();
+          loadInShapes[Math.floor(Math.random() * loadInShapes.length)].svg(
+            randomColour,
+          );
         newShape.style.position = "absolute";
         newShape.style.top = "50%";
         newShape.style.left = "50%";
         newShape.style.transform = "translate(-50%, -50%)";
+        newShape.style.rotate = `${Math.random() * 30 - 15}deg`;
         newChar.appendChild(newShape);
         newWord.appendChild(newChar);
 
