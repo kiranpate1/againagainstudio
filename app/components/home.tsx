@@ -135,7 +135,7 @@ export default function Home() {
   useEffect(() => {
     if (isHome && containerRef.current) {
       const elements = containerRef.current.querySelectorAll(
-        "p:not([data-animated]), a:not([data-animated]), img:not([data-animated])",
+        "a:not([data-animated]), img:not([data-animated])",
       );
       elements.forEach((el, index) => {
         const htmlEl = el as HTMLElement;

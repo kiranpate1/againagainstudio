@@ -223,10 +223,23 @@ select:-webkit-autofill:focus {
   }
 
   .animate-ready h1 span,
-  .animate-ready p,
   .animate-ready a,
   .animate-ready img {
     opacity: 0;
     transform: translateY(100px);
+  }
+
+  .animate-ready p {
+    opacity: 0;
+    animation: opacityIn 50ms forwards 100ms;
+  }
+
+  @keyframes opacityIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
