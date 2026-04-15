@@ -1,7 +1,10 @@
 "use server";
 
-const ZAPIER_WEBHOOK_URL =
-  "https://hooks.zapier.com/hooks/catch/26081374/u74v0kd/";
+const ZAPIER_WEBHOOK_URL = process.env.ZAPIER_WEBHOOK_URL;
+
+if (!ZAPIER_WEBHOOK_URL) {
+  throw new Error("ZAPIER_WEBHOOK_URL is not defined in environment variables");
+}
 
 export async function submitContactForm(formData: FormData) {
   const name = formData.get("name") as string;
@@ -13,7 +16,7 @@ export async function submitContactForm(formData: FormData) {
   }
 
   try {
-    const response = await fetch(ZAPIER_WEBHOOK_URL, {
+    const response = await fetch(ZAPIER_WEBHOOK_URL!, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
