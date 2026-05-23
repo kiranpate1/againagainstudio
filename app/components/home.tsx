@@ -81,6 +81,9 @@ export default function Home() {
     const titleElement = introTitleRef.current;
     const actualTitle = actualTitleRef.current;
 
+    // Only create the animation if it hasn't been created yet
+    if (titleElement.children.length > 0) return;
+
     originalTitle.split(" ").forEach((word, wordIndex) => {
       const newWord = document.createElement("div");
       newWord.style.display = "inline-block";

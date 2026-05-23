@@ -35,11 +35,13 @@ export default function Contact() {
   const contactRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const closeContactRef = useRef<HTMLAnchorElement>(null);
+  const closeRef = useRef<HTMLDivElement>(null);
   const [isFormOpen, setIsFormOpen] = useState(pathname === "/contact");
   const isFormOpenRef = useRef(pathname === "/contact");
   const previousPagePathRef = useRef<string>(
     pathname === "/contact" ? "/" : pathname,
   );
+  const hasAnimatedInitialPeek = useRef(false);
 
   if (pathname !== "/contact" && pathname !== previousPagePathRef.current) {
     previousPagePathRef.current = pathname;
@@ -75,6 +77,17 @@ export default function Contact() {
         setIsFormOpen(false);
         router.push(previousPagePathRef.current);
       });
+    }
+
+    if (closeRef.current) {
+      const handleCloseClick = (e: MouseEvent) => {
+        e.preventDefault();
+        if (isFormOpen) {
+          setIsFormOpen(false);
+          router.push(previousPagePathRef.current);
+        }
+      };
+      closeRef.current.addEventListener("click", handleCloseClick);
     }
 
     isFormOpenRef.current = isFormOpen;
@@ -645,6 +658,28 @@ export default function Contact() {
     animatePendulum(120, 1, 0);
   }, []);
 
+  // Initial peek animation to show it's interactive
+  useEffect(() => {
+    if (
+      !hasAnimatedInitialPeek.current &&
+      !isFormOpen &&
+      formRef.current &&
+      pathname !== "/contact"
+    ) {
+      hasAnimatedInitialPeek.current = true;
+
+      // Start slightly visible
+      formRef.current.style.transform = "translateY(-88%)";
+
+      // Animate up after a brief moment
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.style.transform = "translateY(-100%)";
+        }
+      }, 50);
+    }
+  }, [isFormOpen, pathname]);
+
   return (
     <div
       className="fixed z-200 inset-0 w-screen h-screen pointer-events-none duration-500 transition-colors"
@@ -652,9 +687,13 @@ export default function Contact() {
     >
       <div
         className="absolute inset-[0_0_auto_0] w-full ease-out duration-500 transition-transform text-(--charm)"
-        style={{ transform: "translateY(-100%)" }}
+        style={{ transform: "translateY(-88%)" }}
         ref={formRef}
       >
+        <div
+          className="absolute bottom-0 left-0 translate-y-full w-full h-screen"
+          ref={closeRef}
+        ></div>
         <div className="absolute bottom-0 right-30 lg:right-78 w-16 lg:w-24 max-w-[12vh] translate-[93.8%]">
           <svg
             className="absolute z-1 -top-18/805 -left-3/107 w-57/107"
